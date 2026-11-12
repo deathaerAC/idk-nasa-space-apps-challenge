@@ -1,15 +1,15 @@
-# center = -22.777024,-86.690368
-# size (m) = 38980.561659,38980.528703
-# pixel scale (m/px) = 2436.285104,2436.285104
+# center = -5.212186,-87.325933
+# size (m) = 50005.668911,50280.959101
+# pixel scale (m/px) = 3142.559944,3142.559944
 
 source,sourceId,units,min,max,mean,sdev
-Deconvolved Hydrogen Map [0.5deg bin],lp_h,ug/g,143.821,156.839,147.271,3.69611
+Deconvolved Hydrogen Map [0.5deg bin],lp_h,ug/g,145.421,203.568,163.699,14.9378
 Kaguya Optical Maturity (OMAT),lk_oma,unitless,-inf,-inf,-inf,-inf
 H-Parameter Map,dlre_hparam,m,-inf,-inf,-inf,-inf
-LP Iron Abundance [0.5° bin] (FeO wt%),lp_fe,wt%,6,6.2,6.09844,0.0680073
-M3 1um depth,lm3_gp_1umbd_a,unitless,0.00838864,0.3295,0.105332,0.0666472
-M3 2um center,lm3_gp_2umbc,nm,1756.01,2441.16,1976.67,137.936
-Roughness at 100m,ldrm_16,unitless,0.426,2.893,0.960887,0.338433
-TerrainHeight,qts_demstack,m,-3062.07,2537.93,599.694,986.09
-TerrainPixelScale,qts_demstack_res,mpp,5,20,6.64062,4.69081
-TerrainSlope,qts_demstack_slope,deg,0.526019,20.6182,8.17375,4.19991
+LP Iron Abundance [0.5° bin] (FeO wt%),lp_fe,wt%,6,6.2,6.10586,0.0469129
+M3 1um depth,lm3_gp_1umbd_a,unitless,0.00661659,0.33635,0.190407,0.0951592
+M3 2um center,lm3_gp_2umbc,nm,1781.26,2403.3,2008.47,121.973
+Roughness at 100m,ldrm_16,unitless,0.463,2.359,0.939627,0.30637
+TerrainHeight,qts_demstack,m,-3499.34,1719.51,-1501.35,1484.38
+TerrainPixelScale,qts_demstack_res,mpp,5,20,5.52734,2.76803
+TerrainSlope,qts_demstack_slope,deg,0.0971392,18.6216,9.16866,4.87495
