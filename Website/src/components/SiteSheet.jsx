@@ -166,7 +166,7 @@ export default function SiteSheet({ site: activeSite, target, destinationSite, o
                 </ul>
                 {destinationSite.body === 'moon' ? (
                   <p className="mt-3 text-[10px] leading-relaxed text-muted-foreground/70">
-                    Some lunar citations are recorded without a full title or URL in the source files.
+                    Some lunar citations may be recorded without a full title or URL.
                   </p>
                 ) : null}
               </Section>
