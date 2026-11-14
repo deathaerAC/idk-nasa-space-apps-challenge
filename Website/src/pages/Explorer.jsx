@@ -7,15 +7,23 @@ import ExplorerControls from '@/components/ExplorerControls';
 import AnalogMap from '@/components/AnalogMap';
 import SiteCard from '@/components/SiteCard';
 import SiteSheet from '@/components/SiteSheet';
+import PlanetarySitePicker from '@/components/PlanetarySitePicker';
 import { ANALOG_SITES } from '@/data/analogSites';
+import { PLANETARY_SITES } from '@/data/planetarySites';
 import { matchScore, rankedSites, TARGETS } from '@/lib/analog';
 
 export default function Explorer() {
   const [target, setTarget] = useState('mars');
+  const [destinationSite, setDestinationSite] = useState(
+    PLANETARY_SITES.find((site) => site.id === 'mars-jezero'),
+  );
   const [env, setEnv] = useState('all');
   const [selectedSlug, setSelectedSlug] = useState(null);
 
-  const ranked = useMemo(() => rankedSites(ANALOG_SITES, target), [target]);
+  const ranked = useMemo(
+    () => rankedSites(ANALOG_SITES, target, destinationSite),
+    [target, destinationSite],
+  );
   const visible = useMemo(
     () => (env === 'all' ? ranked : ranked.filter((entry) => entry.site.env_type === env)),
     [ranked, env],
@@ -23,6 +31,18 @@ export default function Explorer() {
 
   const selected = ANALOG_SITES.find((site) => site.slug === selectedSlug) || null;
   const lead = ranked[0];
+
+  function changeTarget(nextTarget) {
+    setTarget(nextTarget);
+    if (destinationSite.body !== nextTarget) {
+      setDestinationSite(PLANETARY_SITES.find((site) => site.body === nextTarget));
+    }
+  }
+
+  function selectDestination(site) {
+    setTarget(site.body);
+    setDestinationSite(site);
+  }
 
   return (
     <div className="min-h-screen">
@@ -32,10 +52,16 @@ export default function Explorer() {
       <main id="atlas" className="mx-auto max-w-[1440px] scroll-mt-20 px-5 sm:px-8">
         <ExplorerControls
           target={target}
-          onTargetChange={setTarget}
+          onTargetChange={changeTarget}
           env={env}
           onEnvChange={setEnv}
           count={visible.length}
+        />
+
+        <PlanetarySitePicker
+          body={target}
+          selectedSiteId={destinationSite.id}
+          onSelect={selectDestination}
         />
 
         <motion.div
@@ -48,6 +74,7 @@ export default function Explorer() {
             <AnalogMap
               entries={visible}
               target={target}
+              destinationSite={destinationSite}
               selectedSlug={selectedSlug}
               onSelect={setSelectedSlug}
             />
@@ -55,7 +82,7 @@ export default function Explorer() {
 
           <div className="flex max-h-[420px] flex-col bg-background sm:max-h-[520px] lg:max-h-[640px]">
             <div className="flex items-center justify-between border-b border-border px-5 py-3">
-              <span className="label-mono text-muted-foreground">{TARGETS[target].long} ranking</span>
+              <span className="label-mono text-muted-foreground">Earth analogs for {destinationSite.name}</span>
               <span className="label-mono text-muted-foreground/60">match / 100</span>
             </div>
             <div className="no-scrollbar flex-1 overflow-y-auto">
@@ -70,6 +97,7 @@ export default function Explorer() {
                     site={site}
                     score={score}
                     target={target}
+                    destinationSite={destinationSite}
                     index={index}
                     active={site.slug === selectedSlug}
                     onSelect={setSelectedSlug}
@@ -95,8 +123,8 @@ export default function Explorer() {
                 <p className="mt-4 text-[14px] leading-[1.8] text-muted-foreground">{lead.site.summary}</p>
               </div>
               <div className="flex shrink-0 items-baseline gap-3">
-                <span className="font-display text-6xl leading-none tabular-nums">{matchScore(lead.site, target)}</span>
-                <span className="label-mono text-muted-foreground">{TARGETS[target].label} match</span>
+                <span className="font-display text-6xl leading-none tabular-nums">{matchScore(lead.site, target, destinationSite)}</span>
+                <span className="label-mono text-muted-foreground">match for {destinationSite.name}</span>
               </div>
             </div>
             <Link
@@ -112,7 +140,7 @@ export default function Explorer() {
 
       <Footer />
 
-      <SiteSheet site={selected} target={target} onClose={() => setSelectedSlug(null)} />
+      <SiteSheet site={selected} target={target} destinationSite={destinationSite} onClose={() => setSelectedSlug(null)} />
     </div>
   );
 }

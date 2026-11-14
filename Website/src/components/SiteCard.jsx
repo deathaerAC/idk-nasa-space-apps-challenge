@@ -3,8 +3,8 @@ import { ArrowUpRight } from 'lucide-react';
 import { band, envLabel, topDimensions } from '@/lib/analog';
 import { cn } from '@/lib/utils';
 
-export default function SiteCard({ site, score, target, active, onSelect, index = 0 }) {
-  const strengths = topDimensions(site, target, 2);
+export default function SiteCard({ site, score, target, destinationSite, active, onSelect, index = 0 }) {
+  const strengths = topDimensions(site, target, 2, destinationSite);
 
   return (
     <motion.button
@@ -21,10 +21,15 @@ export default function SiteCard({ site, score, target, active, onSelect, index 
       )}
     >
       <div className="flex items-start justify-between gap-4">
-        <div className="min-w-0">
-          <p className="label-mono text-muted-foreground">{envLabel(site.env_type)}</p>
-          <h3 className="mt-1.5 truncate text-[15px] font-medium tracking-tight">{site.name}</h3>
-          <p className="mt-0.5 truncate text-[12px] text-muted-foreground">{site.region}</p>
+        <div className="flex min-w-0 gap-3">
+          <span className="pt-1 font-mono text-[10px] text-muted-foreground/60">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <div className="min-w-0">
+            <p className="label-mono text-muted-foreground">{envLabel(site.env_type)}</p>
+            <h3 className="mt-1.5 truncate text-[15px] font-medium tracking-tight">{site.name}</h3>
+            <p className="mt-0.5 truncate text-[12px] text-muted-foreground">{site.region}</p>
+          </div>
         </div>
         <div className="shrink-0 text-right">
           <div className="font-display text-3xl leading-none tabular-nums">{score}</div>

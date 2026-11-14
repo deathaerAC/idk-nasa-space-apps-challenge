@@ -1,19 +1,19 @@
 import { useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, MapPin, ArrowRight } from 'lucide-react';
-import { band, envLabel, formatCoord, matchScore, orderedDimensions, TARGETS, TARGET_CONDITIONS } from '@/lib/analog';
+import { band, envLabel, formatCoord, matchScore, matchWeights, orderedDimensions, TARGETS, TARGET_CONDITIONS } from '@/lib/analog';
 import DimensionBar from './DimensionBar';
 import FieldBrief from './FieldBrief';
 import NasaClimatePanel from './NasaClimatePanel';
 import SiteNotes from './SiteNotes';
 
-export default function SiteSheet({ site: activeSite, target, onClose }) {
+export default function SiteSheet({ site: activeSite, target, destinationSite, onClose }) {
   const lastSite = useRef(activeSite);
   if (activeSite) lastSite.current = activeSite;
   const site = activeSite || lastSite.current;
 
-  const score = site ? matchScore(site, target) : 0;
-  const weights = TARGETS[target].weights;
+  const score = site ? matchScore(site, target, destinationSite) : 0;
+  const weights = matchWeights(target, destinationSite);
 
   return (
     <AnimatePresence>
@@ -86,7 +86,7 @@ export default function SiteSheet({ site: activeSite, target, onClose }) {
 
               <Section title="Dimension scores">
                 <div className="space-y-3">
-                  {orderedDimensions(target).map((dimension, index) => (
+                  {orderedDimensions(target, destinationSite).map((dimension, index) => (
                     <DimensionBar
                       key={dimension.key}
                       label={dimension.label}

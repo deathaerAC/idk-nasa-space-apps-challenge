@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, CircleMarker, Tooltip } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { matchScore } from '@/lib/analog';
 
-export default function AnalogMap({ entries, target, selectedSlug, onSelect }) {
+export default function AnalogMap({ entries, target, destinationSite, selectedSlug, onSelect }) {
   return (
     <div className="relative h-[420px] w-full sm:h-[520px] lg:h-[640px]">
       <MapContainer
@@ -21,7 +21,7 @@ export default function AnalogMap({ entries, target, selectedSlug, onSelect }) {
           maxZoom={6}
         />
         {entries.map(({ site }) => {
-          const score = matchScore(site, target);
+          const score = matchScore(site, target, destinationSite);
           const active = site.slug === selectedSlug;
           return (
             <CircleMarker

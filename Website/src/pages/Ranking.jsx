@@ -1,17 +1,37 @@
 import { useMemo, useState } from 'react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteSheet from '@/components/SiteSheet';
+import PlanetarySitePicker from '@/components/PlanetarySitePicker';
 import { Footer } from '@/pages/Explorer';
 import { ANALOG_SITES } from '@/data/analogSites';
-import { DIMENSIONS, TARGETS, band, rankedSites } from '@/lib/analog';
+import { PLANETARY_SITES } from '@/data/planetarySites';
+import { DIMENSIONS, TARGETS, band, matchWeights, rankedSites } from '@/lib/analog';
 import { cn } from '@/lib/utils';
 
 export default function Ranking() {
   const [target, setTarget] = useState('mars');
+  const [destinationSite, setDestinationSite] = useState(
+    PLANETARY_SITES.find((site) => site.id === 'mars-jezero'),
+  );
   const [selectedSlug, setSelectedSlug] = useState(null);
-  const rows = useMemo(() => rankedSites(ANALOG_SITES, target), [target]);
-  const weights = TARGETS[target].weights;
+  const rows = useMemo(
+    () => rankedSites(ANALOG_SITES, target, destinationSite),
+    [target, destinationSite],
+  );
+  const weights = matchWeights(target, destinationSite);
   const selected = ANALOG_SITES.find((site) => site.slug === selectedSlug) || null;
+
+  function changeTarget(nextTarget) {
+    setTarget(nextTarget);
+    if (destinationSite.body !== nextTarget) {
+      setDestinationSite(PLANETARY_SITES.find((site) => site.body === nextTarget));
+    }
+  }
+
+  function selectDestination(site) {
+    setTarget(site.body);
+    setDestinationSite(site);
+  }
 
   return (
     <div className="min-h-screen">
@@ -23,7 +43,7 @@ export default function Ranking() {
           Every site, every dimension.
         </h1>
         <p className="mt-5 max-w-[62ch] text-[15px] leading-[1.75] text-muted-foreground">
-          {TARGETS[target].blurb} Select a row to read the full field characterization.
+          {TARGETS[target].blurb} Earth analogs are ranked for {destinationSite.name}. Select a row to read the full field characterization.
         </p>
 
         <div className="mt-9 flex flex-wrap items-center justify-between gap-4">
@@ -32,7 +52,7 @@ export default function Ranking() {
               <button
                 key={option.id}
                 type="button"
-                onClick={() => setTarget(option.id)}
+                onClick={() => changeTarget(option.id)}
                 className={cn(
                   'px-4 py-2 text-[12px] tracking-tight transition-colors',
                   target === option.id ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground',
@@ -44,6 +64,12 @@ export default function Ranking() {
           </div>
           <p className="label-mono text-muted-foreground">Scores 0–100 · weights shown per column</p>
         </div>
+
+        <PlanetarySitePicker
+          body={target}
+          selectedSiteId={destinationSite.id}
+          onSelect={selectDestination}
+        />
 
         <div className="mt-6 overflow-x-auto border border-border">
           <table className="w-full min-w-[860px] border-collapse text-left">
@@ -108,7 +134,7 @@ export default function Ranking() {
       </main>
 
       <Footer />
-      <SiteSheet site={selected} target={target} onClose={() => setSelectedSlug(null)} />
+      <SiteSheet site={selected} target={target} destinationSite={destinationSite} onClose={() => setSelectedSlug(null)} />
     </div>
   );
 }
