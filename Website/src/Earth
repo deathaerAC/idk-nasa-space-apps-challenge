@@ -1,0 +1,130 @@
+var startDate = '2023-01-01';
+var endDate = '2024-12-31';
+
+// 2. Load land surface temperature (MODIS)
+var temperature = ee.ImageCollection('MODIS/061/MOD11A2')
+  .filterDate(startDate, endDate)
+  .select('LST_Day_1km')
+  .mean()
+  .multiply(0.02)
+  .subtract(273.15)
+  .rename('Temperature_C');
+
+// 3. Load vegetation index (MODIS NDVI)
+var vegetation = ee.ImageCollection('MODIS/061/MOD13Q1')
+  .filterDate(startDate, endDate)
+  .select('NDVI')
+  .mean()
+  .multiply(0.0001)
+  .rename('NDVI');
+
+// 4. Load rainfall (CHIRPS)
+var rainfall = ee.ImageCollection('UCSB-CHG/CHIRPS/DAILY')
+  .filterDate(startDate, endDate)
+  .select('precipitation')
+  .sum()
+  .rename('Rainfall_mm');
+
+// 5. Load elevation and calculate slope
+var elevation = ee.Image('USGS/SRTMGL1_003')
+  .select('elevation');
+
+var slope = ee.Terrain.slope(elevation)
+  .rename('Slope_Degrees');
+
+// 6. Calculate environmental suitability indicators
+// Lower rainfall = higher dryness score
+var drynessScore = rainfall
+  .divide(500)
+  .clamp(0, 1)
+  .multiply(-1)
+  .add(1);
+
+// Lower NDVI = less vegetation
+var bareLandScore = vegetation
+  .add(0.1)
+  .divide(0.4)
+  .clamp(0, 1)
+  .multiply(-1)
+  .add(1);
+
+// Lower slope = flatter terrain
+var flatTerrainScore = slope
+  .divide(30)
+  .clamp(0, 1)
+  .multiply(-1)
+  .add(1);
+
+// 7. Combine indicators into a 0–100 score
+// Weights are illustrative and can be adjusted.
+var suitability = drynessScore.multiply(0.40)
+  .add(bareLandScore.multiply(0.35))
+  .add(flatTerrainScore.multiply(0.25))
+  .multiply(100)
+  .rename('Analog_Suitability');
+
+// 8. Combine all datasets
+var results = ee.Image.cat([
+  suitability,
+  temperature,
+  vegetation,
+  rainfall,
+  elevation,
+  slope
+]);
+
+// 9. Display map layers
+Map.setCenter(0, 20, 2);
+
+Map.addLayer(
+  suitability,
+  {
+    min: 0,
+    max: 100,
+    palette: ['blue', 'yellow', 'orange', 'red']
+  },
+  'Analog Suitability Score'
+);
+
+Map.addLayer(
+  temperature,
+  {
+    min: -20,
+    max: 50,
+    palette: ['blue', 'white', 'red']
+  },
+  'Land Surface Temperature'
+);
+
+Map.addLayer(
+  vegetation,
+  {
+    min: 0,
+    max: 0.8,
+    palette: ['brown', 'yellow', 'green']
+  },
+  'Vegetation (NDVI)'
+);
+
+Map.addLayer(
+  slope,
+  {
+    min: 0,
+    max: 40,
+    palette: ['white', 'orange', 'red']
+  },
+  'Terrain Slope'
+);
+
+// 10. Export results to Google Drive
+Export.image.toDrive({
+  image: results,
+  description: 'Terrestrial_Analog_Suitability',
+  scale: 5000,
+  region: ee.Geometry.Rectangle([-180, -60, 180, 80]),
+  maxPixels: 1e13,
+  fileFormat: 'GeoTIFF'
+});
+
+print('Terrestrial analog analysis complete');
+print('Results:', results);
