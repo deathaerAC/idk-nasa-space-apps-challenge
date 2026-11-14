@@ -2,6 +2,8 @@ import { useMemo, useState } from 'react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteSheet from '@/components/SiteSheet';
 import PlanetarySitePicker from '@/components/PlanetarySitePicker';
+import DestinationBand from '@/components/DestinationBand';
+import { Astronaut, PlanetIcon } from '@/components/space';
 import { Footer } from '@/pages/Explorer';
 import { ANALOG_SITES } from '@/data/analogSites';
 import { PLANETARY_SITES } from '@/data/planetarySites';
@@ -52,18 +54,29 @@ export default function Ranking() {
               <button
                 key={option.id}
                 type="button"
+                data-sound="switch"
                 onClick={() => changeTarget(option.id)}
                 className={cn(
-                  'px-4 py-2 text-[12px] tracking-tight transition-colors',
+                  'inline-flex items-center gap-2 px-4 py-2 text-[12px] tracking-tight transition-colors',
                   target === option.id ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground',
                 )}
               >
+                <PlanetIcon planet={option.id} size={16} />
                 {option.label}
               </button>
             ))}
           </div>
           <p className="label-mono text-muted-foreground">Scores 0–100 · weights shown per column</p>
         </div>
+
+        <DestinationBand
+          target={target}
+          onTargetChange={changeTarget}
+          destinationSite={destinationSite}
+          count={rows.length}
+          best={rows[0]}
+          mascot={<Astronaut mood="read" size="100%" />}
+        />
 
         <PlanetarySitePicker
           body={target}

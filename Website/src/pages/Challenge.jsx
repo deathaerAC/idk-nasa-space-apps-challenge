@@ -1,4 +1,5 @@
 import SiteHeader from '@/components/SiteHeader';
+import { PlanetIcon } from '@/components/space';
 import { Footer } from '@/pages/Explorer';
 import { DIMENSIONS, TARGETS, TARGET_CONDITIONS } from '@/lib/analog';
 
@@ -307,7 +308,10 @@ export default function Challenge() {
           <div className="mt-8 grid gap-px border border-border bg-border sm:grid-cols-2">
             {Object.values(TARGETS).map((target) => (
               <div key={target.id} className="bg-background p-6">
-                <p className="label-mono text-primary">{target.long}</p>
+                <p className="label-mono flex items-center gap-2.5 text-primary">
+                  <PlanetIcon planet={target.id} size={20} className="sp-bob" />
+                  {target.long}
+                </p>
                 <ul className="mt-4 space-y-2">
                   {DIMENSIONS.map((dimension) => (
                     <li key={dimension.key} className="flex items-baseline justify-between gap-4">
@@ -340,7 +344,10 @@ export default function Challenge() {
           <div className="mt-8 grid gap-px border border-border bg-border lg:grid-cols-2">
             {Object.values(TARGETS).map((target) => (
               <div key={target.id} className="bg-background">
-                <p className="label-mono border-b border-border px-5 py-3 text-muted-foreground">{target.long}</p>
+                <p className="label-mono flex items-center gap-2.5 border-b border-border px-5 py-3 text-muted-foreground">
+                  <PlanetIcon planet={target.id} size={20} className="sp-bob" />
+                  {target.long}
+                </p>
                 <ul className="divide-y divide-border/60">
                   {TARGET_CONDITIONS[target.id].map((condition) => (
                     <li key={condition.label} className="flex items-baseline justify-between gap-6 px-5 py-3">

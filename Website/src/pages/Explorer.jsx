@@ -4,6 +4,9 @@ import { motion } from 'framer-motion';
 import SiteHeader from '@/components/SiteHeader';
 import Hero from '@/components/Hero';
 import ExplorerControls from '@/components/ExplorerControls';
+import DestinationBand from '@/components/DestinationBand';
+import AstronautGuide from '@/components/AstronautGuide';
+import { AnimatedPlanet, PlanetIcon, SoundToggle } from '@/components/space';
 import AnalogMap from '@/components/AnalogMap';
 import SiteCard from '@/components/SiteCard';
 import SiteSheet from '@/components/SiteSheet';
@@ -45,9 +48,10 @@ export default function Explorer() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="relative min-h-screen">
       <SiteHeader />
       <Hero siteCount={ANALOG_SITES.length} />
+      <AstronautGuide empty={visible.length === 0} pulseKey={`${target}:${env}:${destinationSite.id}`} />
 
       <main id="atlas" className="mx-auto max-w-[1440px] scroll-mt-20 px-5 sm:px-8">
         <ExplorerControls
@@ -56,6 +60,15 @@ export default function Explorer() {
           env={env}
           onEnvChange={setEnv}
           count={visible.length}
+        />
+
+        <DestinationBand
+          target={target}
+          onTargetChange={changeTarget}
+          env={env}
+          destinationSite={destinationSite}
+          count={visible.length}
+          best={visible[0]}
         />
 
         <PlanetarySitePicker
@@ -122,9 +135,12 @@ export default function Explorer() {
                 <h2 className="mt-4 font-display text-[clamp(1.9rem,4vw,3rem)] leading-[1.05]">{lead.site.name}</h2>
                 <p className="mt-4 text-[14px] leading-[1.8] text-muted-foreground">{lead.site.summary}</p>
               </div>
-              <div className="flex shrink-0 items-baseline gap-3">
-                <span className="font-display text-6xl leading-none tabular-nums">{matchScore(lead.site, target, destinationSite)}</span>
-                <span className="label-mono text-muted-foreground">match for {destinationSite.name}</span>
+              <div className="flex shrink-0 items-center gap-5">
+                <AnimatedPlanet key={target} planet={target} size={92} parallax={6} enter alt="" />
+                <div className="flex items-baseline gap-3">
+                  <span className="font-display text-6xl leading-none tabular-nums">{matchScore(lead.site, target, destinationSite)}</span>
+                  <span className="label-mono text-muted-foreground">match for {destinationSite.name}</span>
+                </div>
               </div>
             </div>
             <Link
@@ -149,9 +165,19 @@ export function Footer() {
   return (
     <footer className="mx-auto mt-20 max-w-[1440px] border-t border-border px-5 py-10 sm:px-8">
       <div className="flex flex-col gap-4 text-[11px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-        <p>Terra Analog Atlas · NASA Space Apps Challenge 2026 · Open Earth, Moon and Mars data</p>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
+          {/* Earth, the Moon and Mars, bobbing one after the other */}
+          <span aria-hidden="true" className="flex items-center gap-2.5">
+            <PlanetIcon planet="earth" size={22} className="sp-bob" />
+            <PlanetIcon planet="moon" size={16} className="sp-bob" style={{ animationDelay: '-1.8s' }} />
+            <PlanetIcon planet="mars" size={19} className="sp-bob" style={{ animationDelay: '-3.6s' }} />
+          </span>
+          <p>Terra Analog Atlas · NASA Space Apps Challenge 2026 · Open Earth, Moon and Mars data</p>
+        </div>
         <p className="font-mono">Dataset v0.1 · curated from published field campaigns</p>
       </div>
+      {/* Click sounds for every button, plus the round sound on / off button in the corner. The footer is on every page. */}
+      <SoundToggle />
     </footer>
   );
 }
