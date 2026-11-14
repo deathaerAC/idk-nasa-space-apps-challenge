@@ -304,3 +304,9 @@ details .tablewrap { border: 0; background: transparent; }
   html { scroll-behavior: auto; }
   * { transition: none !important; }
 }
+
+#map {
+    height: 100%;
+    width: 100%;
+    border-radius: 12px;
+}
