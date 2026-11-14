@@ -16,7 +16,7 @@ export default function SiteHeader() {
       <div className="mx-auto flex h-16 max-w-[1440px] items-center justify-between gap-4 px-5 sm:h-[72px] sm:px-8">
         <Link to="/" className="flex items-center gap-3">
           <span className="grid h-9 w-9 place-items-center rounded-full border border-border bg-card">
-            <Orbit className="h-4 w-4 text-primary" strokeWidth={1.5} />
+            <Orbit className="h-4 w-4 text-primary motion-safe:animate-[spin_40s_linear_infinite]" strokeWidth={1.5} />
           </span>
           <span className="leading-tight">
             <span className="label-mono block text-muted-foreground">Terra Analog Atlas</span>

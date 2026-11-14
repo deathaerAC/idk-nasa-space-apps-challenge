@@ -2,6 +2,7 @@ import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { band, envLabel, topDimensions } from '@/lib/analog';
 import { cn } from '@/lib/utils';
+import { TerrainIcon } from '@/components/space';
 
 export default function SiteCard({ site, score, target, destinationSite, active, onSelect, index = 0 }) {
   const strengths = topDimensions(site, target, 2, destinationSite);
@@ -26,7 +27,10 @@ export default function SiteCard({ site, score, target, destinationSite, active,
             {String(index + 1).padStart(2, '0')}
           </span>
           <div className="min-w-0">
-            <p className="label-mono text-muted-foreground">{envLabel(site.env_type)}</p>
+            <p className="label-mono flex items-center gap-1.5 text-muted-foreground">
+              <TerrainIcon type={site.env_type} size={13} />
+              {envLabel(site.env_type)}
+            </p>
             <h3 className="mt-1.5 truncate text-[15px] font-medium tracking-tight">{site.name}</h3>
             <p className="mt-0.5 truncate text-[12px] text-muted-foreground">{site.region}</p>
           </div>

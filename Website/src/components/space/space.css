@@ -1,0 +1,1071 @@
+/*
+  Space motion kit. Pure CSS, no libraries.
+  Every class starts with "sp-" so it will not clash with your own styles.
+  People who turned on "reduce motion" in their device settings see still pictures.
+*/
+
+/* Put your page content in a box with this class so it sits above a fixed star field. */
+.sp-above {
+  position: relative;
+  z-index: 1;
+}
+
+/* ---------- Stars ---------- */
+
+.sp-stars {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Add this too if the stars should stay inside one box instead of filling the page. */
+.sp-stars--contained {
+  position: absolute;
+}
+
+/* The script moves each layer directly as the mouse moves (see createStars in space-core.js). */
+.sp-stars__layer {
+  position: absolute;
+  inset: -3%;
+  transition: transform 0.8s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.sp-star {
+  position: absolute;
+  width: var(--s, 2px);
+  height: var(--s, 2px);
+  border-radius: 50%;
+  background: var(--c, #fff);
+  opacity: var(--o, 0.8);
+  animation: sp-twinkle var(--t, 4s) ease-in-out var(--d, 0s) infinite;
+}
+
+.sp-star--glow {
+  box-shadow: 0 0 6px 1px var(--c, #fff);
+}
+
+@keyframes sp-twinkle {
+  0%,
+  100% {
+    opacity: var(--o, 0.8);
+    transform: scale(1);
+  }
+  50% {
+    opacity: calc(var(--o, 0.8) * 0.2);
+    transform: scale(0.75);
+  }
+}
+
+/* A shooting star is a short line with a bright head. It flashes by, then waits. */
+.sp-shoot {
+  position: absolute;
+  left: var(--x, 20%);
+  top: var(--y, 15%);
+  width: var(--len, 140px);
+  height: 2px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.95));
+  transform-origin: 100% 50%;
+  opacity: 0;
+  animation: sp-shoot var(--dur, 12s) linear var(--delay, 3s) infinite;
+}
+
+.sp-shoot::after {
+  content: "";
+  position: absolute;
+  right: -1px;
+  top: -1px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 8px 2px rgba(190, 215, 255, 0.9);
+}
+
+@keyframes sp-shoot {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) rotate(var(--rot, 32deg));
+  }
+  1% {
+    opacity: 1;
+  }
+  5% {
+    opacity: 1;
+  }
+  7%,
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--dx, 360px), var(--dy, 225px), 0) rotate(var(--rot, 32deg));
+  }
+}
+
+/* ---------- Planets ---------- */
+
+.sp-planet {
+  --sp-size: 320px;
+  --sp-glow: 120, 180, 255;
+  position: relative;
+  flex: none;
+  width: var(--sp-size);
+  aspect-ratio: 1;
+  animation: sp-float var(--sp-float-time, 8s) ease-in-out var(--sp-phase, 0s) infinite;
+}
+
+.sp-planet--earth {
+  --sp-glow: 110, 175, 255;
+}
+.sp-planet--moon {
+  --sp-glow: 200, 212, 238;
+}
+.sp-planet--mars {
+  --sp-glow: 255, 150, 105;
+}
+
+/* Add this class to keep a planet still. */
+.sp-planet--still {
+  animation: none;
+}
+
+.sp-planet__body {
+  position: absolute;
+  inset: 0;
+  transform: translate3d(calc(var(--sp-px, 0) * 1px), calc(var(--sp-py, 0) * 1px), 0)
+    scale(var(--sp-scale, 1));
+  transition: transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.sp-planet:hover {
+  --sp-scale: 1.06;
+}
+
+/* A soft halo behind the planet that slowly breathes. */
+.sp-planet__glow {
+  position: absolute;
+  inset: -16%;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    closest-side,
+    rgba(var(--sp-glow), 0) 52%,
+    rgba(var(--sp-glow), 0.34) 59%,
+    rgba(var(--sp-glow), 0.12) 77%,
+    rgba(var(--sp-glow), 0) 100%
+  );
+  animation: sp-pulse var(--sp-pulse-time, 6s) ease-in-out var(--sp-phase, 0s) infinite;
+}
+
+.sp-planet__img {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Optional: planet fades and grows in when the page loads. */
+.sp-planet--enter .sp-planet__body {
+  animation: sp-fade 1s ease var(--sp-enter-delay, 0s) both;
+}
+.sp-planet--enter .sp-planet__img {
+  animation: sp-grow 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) var(--sp-enter-delay, 0s) both;
+}
+
+@keyframes sp-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, calc(var(--sp-float-amp, 10px) * -1), 0);
+  }
+}
+
+@keyframes sp-pulse {
+  0%,
+  100% {
+    opacity: 0.6;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.07);
+  }
+}
+
+@keyframes sp-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes sp-grow {
+  from {
+    transform: scale(0.88);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+/* ---------- Moon orbiting Earth ---------- */
+
+.sp-orbit {
+  --sp-size: 520px;
+  position: relative;
+  flex: none;
+  width: var(--sp-size);
+  aspect-ratio: 1;
+  isolation: isolate;
+  animation: sp-float var(--sp-float-time, 10s) ease-in-out var(--sp-phase, 0s) infinite;
+}
+
+/* Add this class to stop the whole scene from floating up and down. */
+.sp-orbit--still {
+  animation: none;
+}
+
+/* Earth is 64% of the box and the Moon is 27% of Earth, which is close to real life. */
+.sp-orbit__earth {
+  --sp-glow: 110, 175, 255;
+  position: absolute;
+  left: 18%;
+  top: 18%;
+  width: 64%;
+  height: 64%;
+  z-index: 3;
+}
+
+.sp-orbit__moon {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 17.5%;
+  aspect-ratio: 1;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.sp-orbit__ring {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.sp-orbit__ring path {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.3);
+  stroke-width: 1px;
+  stroke-dasharray: 2 6;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The far half of the path sits behind Earth, the near half sits in front. */
+.sp-orbit__ring--back {
+  z-index: 1;
+}
+.sp-orbit__ring--front {
+  z-index: 4;
+}
+
+/* ---------- Planet stage: Moon, Earth and Mars in a row ---------- */
+
+/*
+  Earth sits in the middle. The planet you are comparing it with is big and bright,
+  the other one is small and faded. A dotted line with a moving spark joins Earth to
+  the chosen planet. The class sp-stage--moon or sp-stage--mars says which is chosen.
+*/
+.sp-stage {
+  --sp-stage-row: 104px; /* height of the row the planets sit in */
+  --sp-stage-earth: 96px;
+  --sp-stage-dest: 84px;
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 498px;
+  padding: 0 14px; /* room for the glow at both ends */
+}
+
+.sp-stage__body {
+  position: relative;
+  flex: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  opacity: 0.42;
+  filter: saturate(0.35);
+  transition: opacity 0.5s ease, filter 0.5s ease;
+}
+
+button.sp-stage__body {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+button.sp-stage__body:hover {
+  opacity: 0.78;
+  filter: saturate(0.8);
+}
+button.sp-stage__body.is-active {
+  cursor: default;
+}
+.sp-stage__body:focus-visible {
+  outline: 1px solid rgba(255, 255, 255, 0.7);
+  outline-offset: 6px;
+  border-radius: 10px;
+}
+
+.sp-stage__body.is-active,
+.sp-stage__body.is-active:hover,
+.sp-stage__body--earth {
+  opacity: 1;
+  filter: none;
+}
+
+.sp-stage__body--moon {
+  --sp-glow: 200, 212, 238;
+  --sp-phase: -2.3s;
+}
+.sp-stage__body--earth {
+  --sp-glow: 110, 175, 255;
+}
+.sp-stage__body--mars {
+  --sp-glow: 255, 150, 105;
+  --sp-phase: -4.6s;
+}
+
+/* The slot keeps every planet on the same line and lets it bob gently. */
+.sp-stage__slot {
+  --sp-float-amp: 5px;
+  display: grid;
+  place-items: center;
+  width: var(--sp-stage-dest);
+  height: var(--sp-stage-row);
+  animation: sp-float 7s ease-in-out var(--sp-phase, 0s) infinite;
+}
+.sp-stage__body--earth .sp-stage__slot {
+  width: var(--sp-stage-earth);
+}
+
+/* Small when it is not chosen, full size when it is. */
+.sp-stage__size {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  transform: scale(0.6);
+  transition: transform 0.55s cubic-bezier(0.2, 1.3, 0.35, 1);
+}
+.sp-stage__body.is-active .sp-stage__size,
+.sp-stage__body--earth .sp-stage__size {
+  transform: scale(1);
+}
+
+.sp-stage__disc {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* The chosen planet pops, Earth gives a small nudge, and a ring spreads out. */
+.sp-stage__body.is-active .sp-stage__disc {
+  animation: sp-pop 0.75s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+.sp-stage__body--earth .sp-stage__disc {
+  animation: sp-nudge 0.6s ease-out both;
+}
+
+.sp-stage__disc::after {
+  content: "";
+  position: absolute;
+  inset: 13%;
+  border-radius: 50%;
+  border: 1.5px solid rgba(var(--sp-glow), 0.9);
+  opacity: 0;
+  pointer-events: none;
+}
+.sp-stage__body.is-active .sp-stage__disc::after {
+  animation: sp-ring 0.95s ease-out both;
+}
+
+/* Only Earth and the chosen planet get the glowing halo. */
+.sp-stage__body:not(.is-active):not(.sp-stage__body--earth) .sp-planet__glow {
+  display: none;
+}
+
+.sp-stage__label {
+  margin-top: 2px;
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 10px;
+  line-height: 1;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* The dotted line between Earth and a planet. */
+.sp-stage__link {
+  --sp-glow: 255, 255, 255;
+  position: relative;
+  flex: 1 1 0;
+  min-width: 26px;
+  max-width: 110px;
+  height: 2px;
+  margin-top: calc(var(--sp-stage-row) / 2 - 1px);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.75) 0.9px, transparent 1.3px);
+  background-size: 9px 2px;
+  background-repeat: repeat-x;
+  opacity: 0.22;
+  transition: opacity 0.5s ease;
+}
+.sp-stage__link--moon {
+  --sp-glow: 200, 212, 238;
+}
+.sp-stage__link--mars {
+  --sp-glow: 255, 150, 105;
+}
+
+/* On the chosen side the dots flow from Earth towards the planet. */
+.sp-stage--mars .sp-stage__link--mars,
+.sp-stage--moon .sp-stage__link--moon {
+  opacity: 0.9;
+  animation: sp-flow 0.9s linear infinite;
+}
+.sp-stage--moon .sp-stage__link--moon {
+  animation-direction: reverse;
+}
+
+/* The spark that travels along the chosen line. */
+.sp-stage__link i {
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 100%;
+  height: 6px;
+  opacity: 0;
+}
+.sp-stage__link i::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: 0 0 10px 3px rgba(var(--sp-glow), 0.8);
+}
+.sp-stage--mars .sp-stage__link--mars i {
+  animation: sp-spark 2.4s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+}
+.sp-stage--moon .sp-stage__link--moon i {
+  animation: sp-spark 2.4s cubic-bezier(0.45, 0, 0.25, 1) infinite reverse;
+}
+
+@keyframes sp-pop {
+  0% {
+    transform: scale(0.72);
+  }
+  55% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes sp-nudge {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.07);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes sp-ring {
+  0% {
+    opacity: 0.9;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.9);
+  }
+}
+
+@keyframes sp-flow {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 9px 0;
+  }
+}
+
+@keyframes sp-spark {
+  0% {
+    transform: translateX(0);
+    opacity: 0;
+  }
+  12%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Narrow phones: everything a little smaller so the row still fits. */
+@media (max-width: 380px) {
+  .sp-stage {
+    --sp-stage-row: 88px;
+    --sp-stage-earth: 80px;
+    --sp-stage-dest: 70px;
+  }
+  .sp-stage__link {
+    min-width: 18px;
+  }
+}
+
+/* ---------- Astronaut mascot ---------- */
+
+.sp-astro {
+  display: block;
+  height: auto;
+  overflow: visible;
+}
+
+/* Legs a little apart, as if drifting. */
+.sp-astro__leg--l {
+  transform-origin: 58px 120px;
+  transform: rotate(7deg);
+  transition: transform 0.3s ease;
+}
+.sp-astro__leg--r {
+  transform-origin: 82px 120px;
+  transform: rotate(-7deg);
+  transition: transform 0.3s ease;
+}
+
+/* The whole figure drifts up and down and rocks a little. */
+.sp-astro__all {
+  transform-origin: 70px 84px;
+  animation: sp-astro-float 6s ease-in-out infinite;
+}
+
+/* A small hop each time the pose changes. */
+.sp-astro__pose {
+  transform-origin: 70px 90px;
+  animation: sp-astro-hop 0.45s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+
+/* Head tips forward to read, and to one side for a shrug. */
+.sp-astro__head {
+  transform-origin: 70px 86px;
+  transition: transform 0.3s ease;
+}
+
+/*
+  The visor slides inside the helmet to show where the astronaut is looking.
+  data-look="down" or "up" on any box around the astronaut sets it from outside.
+*/
+.sp-astro__visor {
+  transition: transform 0.3s ease;
+}
+.sp-astro--look .sp-astro__visor,
+[data-look="down"] .sp-astro__visor {
+  transform: translateY(6.5px);
+}
+[data-look="up"] .sp-astro__visor {
+  transform: translateY(-5px);
+}
+.sp-astro--look .sp-astro__head {
+  transform: translateY(2px) rotate(5deg);
+}
+
+/* Flying: legs trail a little wider. */
+.sp-astro--fly .sp-astro__leg--l {
+  transform: rotate(15deg);
+}
+.sp-astro--fly .sp-astro__leg--r {
+  transform: rotate(-15deg);
+}
+.sp-astro--read .sp-astro__head {
+  animation: sp-astro-nod 3.4s ease-in-out infinite;
+}
+.sp-astro--shrug .sp-astro__head {
+  transform: rotate(-8deg);
+}
+
+/* The raised arm waves every few seconds. */
+.sp-astro__wave {
+  transform-origin: 93px 95px;
+  animation: sp-astro-wave 4.2s ease-in-out infinite;
+}
+
+/* The pamphlet tilts a touch, as if a page is being turned. */
+.sp-astro__paper {
+  transform-origin: 70px 108px;
+  animation: sp-astro-page 3.4s ease-in-out infinite;
+}
+
+/* Shoulders go up and down in a shrug. */
+.sp-astro__arms--shrug {
+  animation: sp-astro-shrug 1.7s ease-in-out infinite;
+}
+
+/* The sign beside the helmet: dots that take turns to jump, or a mark that pops in. */
+.sp-astro__mark--dots circle {
+  animation: sp-astro-dot 1.25s ease-in-out infinite;
+}
+.sp-astro__mark--dots circle:nth-child(2) {
+  animation-delay: 0.16s;
+}
+.sp-astro__mark--dots circle:nth-child(3) {
+  animation-delay: 0.32s;
+}
+.sp-astro__mark--pop {
+  transform-origin: 123px 30px;
+  animation: sp-astro-mark 0.5s cubic-bezier(0.2, 1.5, 0.35, 1) both, sp-astro-tilt 1.8s ease-in-out 0.5s infinite;
+}
+
+@keyframes sp-astro-float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-2.5deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(2.5deg);
+  }
+}
+
+@keyframes sp-astro-hop {
+  0% {
+    transform: scale(0.9);
+  }
+  55% {
+    transform: scale(1.06);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes sp-astro-nod {
+  0%,
+  100% {
+    transform: translateY(2.5px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(3.5px) rotate(2.5deg);
+  }
+}
+
+@keyframes sp-astro-wave {
+  0%,
+  52%,
+  100% {
+    transform: rotate(0deg);
+  }
+  60%,
+  76% {
+    transform: rotate(-16deg);
+  }
+  68%,
+  84% {
+    transform: rotate(9deg);
+  }
+}
+
+@keyframes sp-astro-page {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(-2.5deg);
+  }
+}
+
+@keyframes sp-astro-shrug {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  45% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes sp-astro-dot {
+  0%,
+  60%,
+  100% {
+    transform: translateY(0);
+    opacity: 0.55;
+  }
+  30% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+}
+
+@keyframes sp-astro-mark {
+  from {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes sp-astro-tilt {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  50% {
+    transform: rotate(9deg);
+  }
+}
+
+/* ---------- Terrain icons ---------- */
+
+/*
+  Small line drawings, one per terrain. They stay still until the icon has the class
+  sp-ti--live (the chosen terrain) or the button or link around it is hovered.
+*/
+.sp-ti {
+  flex: none;
+  display: inline-block;
+  overflow: visible;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.sp-ti .sp-ti__solid {
+  fill: currentColor;
+  stroke: none;
+}
+.sp-ti [class*="sp-ti__"] {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__turn {
+  animation: sp-ti-turn 2.4s ease-in-out infinite;
+}
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__sun {
+  animation: sp-ti-sun 2.2s ease-in-out infinite;
+}
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__spin {
+  animation: sp-ti-spin 7s linear infinite;
+}
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__puff {
+  animation: sp-ti-rise 1.5s ease-out infinite;
+}
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__meteor {
+  animation: sp-ti-meteor 1.9s ease-in infinite;
+}
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__ripple {
+  animation: sp-ti-ripple 1.9s ease-out infinite;
+}
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__drop {
+  animation: sp-ti-drop 1.7s ease-in infinite;
+}
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__spark {
+  animation: sp-ti-spark 1.6s ease-in-out infinite;
+}
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__steam {
+  animation: sp-ti-steam 2s ease-out infinite;
+}
+:is(.sp-ti--live, :is(button, a):hover .sp-ti) .sp-ti__wind {
+  animation: sp-ti-wind 1.8s ease-in-out infinite;
+}
+
+@keyframes sp-ti-turn {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.15);
+  }
+}
+@keyframes sp-ti-sun {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-1.2px) scale(1.25);
+  }
+}
+@keyframes sp-ti-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes sp-ti-rise {
+  0% {
+    transform: translateY(1.5px);
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-3.5px);
+    opacity: 0;
+  }
+}
+@keyframes sp-ti-meteor {
+  0% {
+    transform: translate(5px, -6px);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  55%,
+  100% {
+    transform: translate(0, 0);
+    opacity: 1;
+  }
+}
+@keyframes sp-ti-ripple {
+  0%,
+  50% {
+    transform: scale(0.75);
+    opacity: 0;
+  }
+  60% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.3);
+    opacity: 0;
+  }
+}
+@keyframes sp-ti-drop {
+  0% {
+    transform: translateY(-1px);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(6.5px);
+    opacity: 0;
+  }
+}
+@keyframes sp-ti-spark {
+  0%,
+  100% {
+    transform: scale(0.5) rotate(0deg);
+    opacity: 0.3;
+  }
+  50% {
+    transform: scale(1.25) rotate(45deg);
+    opacity: 1;
+  }
+}
+@keyframes sp-ti-steam {
+  0% {
+    transform: translateY(1.5px);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-2.5px);
+    opacity: 0;
+  }
+}
+@keyframes sp-ti-wind {
+  0%,
+  100% {
+    transform: translateX(-1.5px);
+    opacity: 0.35;
+  }
+  50% {
+    transform: translateX(1.5px);
+    opacity: 1;
+  }
+}
+
+/* ---------- Music and sound buttons ---------- */
+
+.sp-sound-dock {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 35;
+  display: flex;
+  gap: 8px;
+}
+
+.sp-sound {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 50%;
+  background: rgba(9, 13, 23, 0.82);
+  color: rgba(255, 255, 255, 0.72);
+  cursor: pointer;
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  transition: color 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+}
+.sp-sound:hover {
+  color: #fff;
+  border-color: rgba(110, 162, 238, 0.75);
+  transform: scale(1.06);
+}
+.sp-sound:focus-visible {
+  outline: 2px solid rgba(110, 162, 238, 0.9);
+  outline-offset: 2px;
+}
+.sp-sound svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Small extras ---------- */
+
+/* A very slow drift and turn, for big background art such as the Earth in the Hero. */
+.sp-drift {
+  animation: sp-drift 22s ease-in-out infinite;
+}
+
+@keyframes sp-drift {
+  0%,
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-18px) rotate(4deg);
+  }
+}
+
+/* A gentle bob for small pictures, for example a row of planet icons. */
+.sp-bob {
+  --sp-float-amp: 3px;
+  animation: sp-float 5.5s ease-in-out var(--sp-phase, 0s) infinite;
+}
+
+/* Text slides up and fades in. Give the element a new React key to play it again. */
+.sp-rise {
+  animation: sp-rise 0.5s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+@keyframes sp-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ---------- Pause and reduced motion ---------- */
+
+/* Anything scrolled out of view rests (see sleepWhenHidden in space-core.js). */
+[data-sp-asleep],
+[data-sp-asleep] *,
+[data-sp-asleep] *::before,
+[data-sp-asleep] *::after {
+  animation-play-state: paused !important;
+}
+
+/* Put the attribute data-sp-paused on <html> to freeze everything. */
+[data-sp-paused] .sp-star,
+[data-sp-paused] .sp-shoot,
+[data-sp-paused] .sp-planet,
+[data-sp-paused] .sp-orbit,
+[data-sp-paused] .sp-planet__glow,
+[data-sp-paused] .sp-planet__body,
+[data-sp-paused] .sp-planet__img,
+[data-sp-paused] .sp-stage__slot,
+[data-sp-paused] .sp-stage__link,
+[data-sp-paused] .sp-stage__link i,
+[data-sp-paused] .sp-bob,
+[data-sp-paused] .sp-astro *,
+[data-sp-paused] .sp-ti * {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sp-star,
+  .sp-planet,
+  .sp-orbit,
+  .sp-planet__glow,
+  .sp-planet__body,
+  .sp-planet__img,
+  .sp-stage__slot,
+  .sp-stage__disc,
+  .sp-stage__disc::after,
+  .sp-stage__link,
+  .sp-stage__link i,
+  .sp-bob,
+  .sp-rise,
+  .sp-drift,
+  .sp-astro *,
+  .sp-ti * {
+    animation: none !important;
+  }
+  .sp-astro--read .sp-astro__head {
+    transform: translateY(2.5px);
+  }
+  .sp-shoot {
+    display: none;
+  }
+  .sp-planet__body,
+  .sp-stars__layer,
+  .sp-stage__size {
+    transition: none;
+  }
+}
