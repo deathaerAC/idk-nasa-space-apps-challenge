@@ -1,0 +1,394 @@
+/* 
+  type DataSource = {
+    url: string;
+    name: string;
+  }
+  type Checklist = {
+    name:string;
+    terrainType:string[];
+    // it seems there's not much info on temperature, sunlight, or radiation. I think we should drop them.
+    temperature:number; // temperature in degrees celcius.
+    // soil or regolith, grain size, dust, mineralogy
+    surfaceMaterial:string[];
+    // how much, and how it changes over time
+    sunlight: string[];
+    radiation: string[];
+    // e.g. water ice, usable minerals
+    resources: string[];
+    interestingBits:string[]
+    hazards: string[];
+    dataSources:DataSource[];
+  }
+*/
+[
+  {
+    name: "Meridiani Planum",
+    terrainType: [
+      "Very flat, low-relief plain (about 1.4 km below the Mars datum) near the equator. ",
+      "Layered sulfate-rich sedimentary bedrock lies under a thin cover of wind-blown sand, ",
+      "with sparse small impact craters and wind ripples."
+    ],
+
+    // Approximate: equatorial surface air temperatures swing from roughly -100 °C
+    // (pre-dawn) to about 0 °C (midday); the annual mean is about -60 °C.
+    temperature: -60,
+
+    surfaceMaterial: [
+      "Soils are fine-grained basaltic sand mixed with dust and sulfate-rich debris from the bedrock, ",
+      "poorly sorted and shaped into wind ripples. The ripples are armored with a lag of ",
+      "granule-sized hematite-rich spherules (concretions) weathered out of the bedrock. ",
+      "The soil layer is thin, about 1 m on the plains. ",
+      "Mineralogy: pyroxene, plagioclase, olivine, crystalline hematite, ",
+      "nanophase iron-oxide dust, and Mg/Ca/Fe sulfates (including jarosite) in the bedrock.",
+    ],
+    sunlight: [
+      "Equatorial site (about 2° S), so day length stays near 12 h and the Sun is high all year, ",
+      "with little seasonal swing in solar energy. Available light is controlled mainly by ",
+      "atmospheric dust: opacity rises in the dusty southern-spring/summer season and during ",
+      "regional or global dust storms (e.g. 2007, 2018), when sunlight can drop sharply for weeks. ",
+      "Dust settling on solar panels reduces power between wind-cleaning events."
+    ],
+
+    radiation: [
+      "No global magnetic field and a thin atmosphere, so the surface gets galactic cosmic rays ",
+      "plus occasional solar particle events. The low elevation gives slightly more atmospheric ",
+      "shielding than highlands sites. Expect a dose on the order of 0.5-0.7 mSv/day, ",
+      "similar to the MSL/Curiosity measurements at Gale crater. This figure is approximate.",
+    ],
+    resources: [
+      "Hydrated sulfate minerals (Mg/Ca/Fe sulfates, jarosite): a possible source of bound water",
+      "Hematite concretions: a ready-made iron-oxide source, already concentrated at the surface",
+      "Basaltic sand and regolith: construction material, radiation shielding, ISRU feedstock",
+      "Olivine and pyroxene: silicate/metal feedstock",
+      "Flat, rock-poor terrain: easy landing, roads and pad construction",
+      // No confirmed surface water ice here; at the equator ice is only possibly stable at depth.
+    ],
+
+    interestingBits: [
+      "Opportunity found strong evidence of past liquid water, including cross-bedding, ripple structures, and chemistry consistent with acidic, saline groundwater and shallow surface water",
+      "Hematite-rich 'blueberry' concretions are widespread and are interpreted as having formed in groundwater",
+      "Orbital spectrometers (e.g. MGS TES) detected a large gray crystalline hematite deposit, a key reason the site was selected",
+      "Layered stratigraphy exposed in Eagle, Endurance and Victoria craters records a sequence of wet-to-dry environmental change",
+      "Opportunity found an iron meteorite ('Heat Shield Rock', later named Meridiani Planum meteorite) and other meteorites on the plain",
+      "Later in the mission Opportunity explored Endeavour Crater's rim, finding clay minerals and gypsum veins indicating less acidic water",
+      "The flat, smooth terrain makes it an unusually safe landing and driving environment"
+      ],
+
+    hazards: [
+      "Dust storms: reduced sunlight and power, plus airborne dust",
+      "Dust on panels and mechanisms: abrasion, electrostatic cling, reduced solar output",
+      "Soft sand ripples: Opportunity was stuck in Purgatory Dune for about 5 weeks in 2005",
+      "Acidic, sulfate- and salt-rich soils and groundwater history: corrosion and toxicity concerns",
+      "Large day/night temperature swings: thermal cycling stress on hardware",
+      "Cosmic-ray and solar-particle radiation with no magnetic shielding",
+      "No confirmed accessible surface water ice, so water needs to be extracted from minerals",
+    ],
+
+    dataSources: [
+      {
+        name: "Arvidson, R. E., et al. (2011), Opportunity Mars Rover mission: Overview and selected results from Purgatory ripple to traverses to Endeavour crater, J. Geophys. Res., 116, E00F15, doi:10.1029/2010JE003746.",
+        url: "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2010JE003746",
+      },
+      {
+        name: "Arvidson et al. 2006, Nature and origin of the hematite-bearing plains of Terra Meridiani (JGR)",
+        url: "https://pubs.usgs.gov/publication/70028845",
+      },
+      {
+        name: "USGS Astrogeology, Soils of Eagle Crater and Meridiani Planum at the Opportunity landing site",
+        url: "https://webarchive.library.unt.edu/eot2008/20081107052053/http://astrogeology.usgs.gov/Research/Publications/AAAS-Science/Vol306Page1723.html",
+      },
+      {
+        name: "Squyres et al. 2006, Two Years at Meridiani Planum: Results from the Opportunity Rover",
+        url: "https://typeset.io/pdf/two-years-at-meridiani-planum-results-from-the-opportunity-538jp73siz.pdf",
+      },
+    ],
+  },
+  {
+    name: "Oxia Planum",
+    terrainType: ["Low-relief, clay-bearing plain with fractured bedrock, on the boundary between the cratered southern highlands of Arabia Terra and the smooth northern lowlands of Chryse Planitia. About 1% of the surface is covered by 396 isolated upstanding mounds. Erosion has exhumed Noachian sedimentary rock, and a 2024 high-resolution geological map identifies 15 distinct units."],
+    // Approximate mean equatorial/low-latitude Mars surface temperature. This is a general
+    // climatological estimate, NOT taken from the sources below. The daily swing is large
+    // (roughly tens of degrees C), so check a site-specific thermal model before relying on it.
+    temperature: -60,
+    surfaceMaterial: ["Fractured Noachian clay-bearing bedrock (a Fe/Mg-rich phyllosilicate-dominated unit) overlain in places by regolith and wind-blown dust. Orbital data distinguish at least two bedrock types in the clay-bearing unit: an orange type in HiRISE images, which matches the strongest clay signals, and a second, spectrally weaker type. Pyroxenes and Al-bearing phyllosilicates occur in the wider catchment. Opal (amorphous hydrated silica) is present stratigraphically between the clay-bearing plains and overlying sedimentary deposits. Grain size and dust cover are not well constrained from orbit."],
+    // Qualitative only; not drawn from the sources below.
+    sunlight: ["Low-latitude (near-equatorial, northern hemisphere) site, so it gets strong year-round insolation that varies seasonally with Mars's orbital eccentricity and axial tilt. Global or regional dust storms can sharply reduce solar flux for weeks at a time. This matters for any solar-powered mission."],
+    // Qualitative only; not drawn from the sources below.
+    radiation: ["Typical Mars surface radiation environment: galactic cosmic rays plus occasional solar particle events. It is only partly shielded by the thin atmosphere, though the low elevation gives slightly more shielding than highland sites. Surface rocks are expected to have been exposed to cosmic bombardment only recently, which limits damage to organic matter. Drilling to 2 m is planned to reach material better shielded from radiation and from daily temperature swings."],
+    resources: [
+      "Fe/Mg-rich clay minerals (phyllosilicates), which are evidence of past liquid water and a good substrate for preserving organics",
+      "Opal (hydrated silica), a water-bearing mineral that can preserve biosignatures",
+      "Hydrated minerals as a potential water source: water bound in clays and opal. Surface water ice is not reported at this latitude.",
+      "Pyroxene-bearing material in the catchment (a possible source of Mg/Fe/Ca silicates)",
+    ],
+    interestingBits: [
+      "Likely the oldest landing site ever visited by a rover on Mars, with Noachian rocks dated to roughly 4 billion years old.",
+      "Chosen for the ExoMars Rosalind Franklin rover after a 5-year process that narrowed eight candidate sites down to one.",
+      "Recent orbital mapping shows the clay deposits extend far beyond earlier estimates, reaching toward Mawrth Vallis about 300 km away. It may be a surviving fragment of a much larger ancient water system.",
+      "A 2026 study suggests Oxia Planum's clays formed first, around 4 billion years ago, predating those at Mawrth Vallis.",
+      "Opal deposits near the centre of the landing site are prime targets in the search for past habitable conditions.",
+      "Rosalind Franklin will be the first rover to drill 2 m below the surface, to find better-preserved biosignatures and analyse them in its onboard laboratory.",
+      "There's an actual landing planned for 2030 (per the 2024 ESA/Open University mapping announcement).",
+      "The clay-bearing unit is well exposed within the landing area, including near its centre.",
+    ],
+    hazards: [
+      "Roughly 396 isolated mounds, several of them inside the landing ellipse, which are a landing and traverse hazard.",
+      "Fractured bedrock and rocky terrain that could limit rover mobility and landing safety.",
+      "Dust storms and dust deposition that reduce solar power and obscure surfaces.",
+      "Strong diurnal temperature swings that stress hardware.",
+      "Surface radiation, which degrades organics near the surface and is the reason for the 2 m drilling strategy.",
+      "Ground-truth uncertainty: much of the mineralogy and morphology comes from orbital data (CRISM, OMEGA, CaSSIS, HiRISE), so regolith thickness, grain size and bearing strength are poorly known.",
+    ],
+    dataSources: [
+      {
+        name: "ESA: ExoMars rover targets vast bed of clay in search for life",
+        url: "https://www.esa.int/Science_Exploration/Human_and_Robotic_Exploration/ExoMars_rover_targets_vast_bed_of_clay_in_search_for_life",
+      },
+      {
+        name: "Astronomy Now: Europe's Mars rover may land in the remains of a vast ancient water system (2026)",
+        url: "https://astronomynow.com/2026/06/04/europes-mars-rover-may-land-in-the-remains-of-a-vast-ancient-water-system/",
+      },
+      {
+        name: "Phys.org: Detailed geological map of Oxia Planum (Fawdon et al., 2024)",
+        url: "https://phys.org/news/2024-03-geologic-european-rover-mars.pdf",
+      },
+      {
+        name: "McNeil et al. 2022: Mounds in Oxia Planum, JGR Planets",
+        url: "https://oro.open.ac.uk/85891",
+      },
+      {
+        name: "McNeil et al. 2025: Hydrated Silica in Oxia Planum, Mars, JGR Planets",
+        url: "https://elib.dlr.de/217093/1/JGR%20Planets%20-%202025%20-%20McNeil%20-%20Hydrated%20Silica%20in%20Oxia%20Planum%20Mars.pdf",
+      },
+      {
+        name: "Mandon et al.: Morphological and Spectral Diversity of the Clay-Bearing Unit at Oxia Planum",
+        url: "https://hal.sorbonne-universite.fr/hal-03263480/document",
+      },
+      {
+        name: "Turner, Fawdon & Davis (2021): Mineralogy of the Oxia Planum Catchment Area, LPSC 52",
+        url: "https://core.ac.uk/download/477907441.pdf",
+      },
+      {
+        name: "Quantin-Nataf et al. / Pacifici et al. (2021): Oxia Planum: Geological Context and Prelanding Interpretation",
+        url: "https://oro.open.ac.uk/74820",
+      },
+      {
+        name: "Fawdon et al. (2022): A CaSSIS and HiRISE map of the clay-bearing unit at Oxia Planum, Planetary and Space Science",
+        url: "https://oro.open.ac.uk/82087",
+      },
+    ],
+  },
+  {
+  name: "Peace Vallis (Gale Crater, Mars)",
+  terrainType: [
+    "Ancient stream valley on the northern rim of Gale Crater (about 4.21°S, 137.23°E), roughly 35 km long.",
+    "The valley enters the crater through a gap in the rim about 15 km wide and drains a catchment of about 730 km² of upland plains.",
+    "It ends in the Peace Vallis alluvial fan, which covers about 80 km² on Aeolis Palus, the low plain in the crater's northern interior.",
+    "The fan's average thickness is estimated at roughly 9 m, and numerous inverted (exhumed) channels are visible on its western surface.",
+    "The fan's morphology and thermal inertia vary, so orbital data distinguish upper-fan, lower-fan and other alluvial units.",
+    "Gale Crater itself is a roughly 154 km impact crater that straddles the hemispheric dichotomy, with Aeolis Mons (Mount Sharp) rising from its centre.",
+    "The fan's distal end lies near Curiosity's 2012 landing site (Bradbury Landing). The fan likely onlapped Bradbury Rise and spilled into a topographic low to its east.",
+  ],
+  // Rough annual-mean surface temperature for an equatorial Gale-latitude site. This is a general
+  // climatological estimate, NOT taken from the sources below. The daily swing is on the order of
+  // tens of degrees C, so check Curiosity REMS data before relying on it.
+  temperature: -50,
+  surfaceMaterial: [
+    "Fluvially deposited sediment: a debris and sediment apron delivered by stream and groundwater flow, from sand-sized to coarser material. Grain size has not been mapped in detail from the sources reviewed.",
+    "Crater-fill units (CF1/CF2) form Aeolis Palus, and mapped alluvial units (AF, BF, CS) form and flank the fan.",
+    "Thin sediments, roughly 10–20 m, cap the upper fan and may record a later period of fluvial activity.",
+    "The nearby Sheepbed mudstone, which Curiosity analysed, is evidence of a habitable lacustrine environment. Its age relative to the fan is poorly constrained.",
+    "Regolith and dust thickness are not quantified in the sources reviewed.",
+  ],
+  // Qualitative only; not drawn from the sources below.
+  sunlight: [
+    "Near-equatorial site (about 4°S), so it gets strong insolation year-round, with seasonal variation from Mars's orbital eccentricity.",
+    "Global or regional dust storms can cut solar flux sharply for weeks.",
+    "Crater walls and Aeolis Mons can shade nearby terrain at low sun angles, though the fan is far from the rim.",
+  ],
+  // Qualitative only; not drawn from the sources below.
+  radiation: [
+    "Standard Mars surface environment: galactic cosmic rays plus occasional solar particle events.",
+    "Gale's floor lies several kilometres below Mars datum, so it gets somewhat more atmospheric shielding than highland sites.",
+    "Curiosity's RAD instrument has measured the real surface dose at Gale. Look up its published values for engineering use.",
+  ],
+  resources: [
+    "Evidence of past water: the fan and valley record sustained fluvial activity, with water probably coming from precipitation, possibly snow.",
+    "Possible groundwater springline deposits at the fan, per a 2019 conference abstract (Amazonian-age groundwater, implying a late period of habitability).",
+    "Fine-grained sediments and clay-bearing mudstones nearby, which are good targets for organics and a potential source of hydrated minerals.",
+    "Abundant loose sediment, which is a possible construction feedstock. Surface water ice is not reported at this latitude.",
+  ],
+  interestingBits: [
+    "Curiosity has already visited the region: it landed at the distal end of the fan on August 6, 2012, so ground truth already exists for its geology.",
+    "The IAU adopted the name Peace Vallis on September 26, 2012, after the Peace River in Canada.",
+    "It is the largest and best-studied fluvial feature in northern Gale Crater.",
+    "Crater counting suggests most alluvial deposits in Gale formed in the Hesperian, so habitable conditions persisted after the Noachian.",
+    "Evidence points to possible younger fluvial reactivation of the upper fan, linked to hypothesised snowmelt activity like that in Margaritifer Terra.",
+    "High-resolution orbital images suggest at least one glacial episode also affected Gale and its watershed.",
+    "A fan-to-mountain traverse is possible: the fan sits in a crater whose central mound exposes a long layered record of Mars's climate history.",
+  ],
+  hazards: [
+    "Rocky, boulder-strewn terrain on the fan and valley that could limit landing safety and rover mobility.",
+    "Steep slopes at the crater rim and valley walls, and rough inverted-channel ridges on the fan surface.",
+    "Landing-ellipse risk near Gale's rim and Aeolis Mons, where rough terrain nearby adds uncertainty.",
+    "Dust storms that reduce solar power and obscure surfaces.",
+    "Large daily temperature swings that stress hardware.",
+    "Wheel damage: Curiosity's wheels took heavy wear on abrasive, sharp-edged rocks in Gale, so traverse planning matters.",
+    "Surface radiation, which degrades organics near the surface.",
+  ],
+  dataSources: [
+    {
+      name: "Wikipedia: Peace Vallis",
+      url: "https://en.wikipedia.org/wiki/Peace_Vallis",
+    },
+    {
+      name: "Palucis et al. (2014), The origin and evolution of the Peace Vallis fan system, JGR Planets (catalogue record)",
+      url: "https://eld.bl.uk/catalog/100024832262_0x000001",
+    },
+    {
+      name: "Palucis et al. (2013), Origin and Evolution of the Peace Vallis Fan System, LPSC 44 (ADS)",
+      url: "https://ui.adsabs.harvard.edu/abs/2013LPI....44.1607P/abstract",
+    },
+    {
+      name: "Grant et al. (2014), The timing of alluvial activity in Gale crater, Mars, GRL",
+      url: "https://core.ac.uk/download/216296159.pdf",
+    },
+    {
+      name: "Grant et al. (2014), The timing of alluvial activity in Gale crater (abstract)",
+      url: "https://core.ac.uk/works/61075318",
+    },
+    {
+      name: "GSA 2013: The relative timing of alluvial activity in Gale crater, Mars",
+      url: "https://gsa.confex.com/gsa/2013AM/webprogram/Paper229840.html",
+    },
+    {
+      name: "Peace Vallis fan and Curiosity landing site context (eScholarship)",
+      url: "https://escholarship.org/content/qt9j07p0zg/qt9j07p0zg.pdf",
+    },
+    {
+      name: "Smithsonian NASM: Alluvial Fans on Mars",
+      url: "https://www.airandspace.si.edu/research/projects/alluvial-fans-mars",
+    },
+    {
+      name: "Amazonian Groundwater Springline at Peace Vallis Fan, Gale Crater (Mars Extant Life 2019, abstract 5043)",
+      url: "https://www.hou.usra.edu/meetings/lifeonmars2019/pdf/5043.pdf",
+    },
+    ],
+  },
+  {
+    name: "Schiaparelli Crater (Schiaparelli Basin), Mars",
+    terrainType: [
+      "Large, heavily eroded impact basin, about 450-470 km across (sources vary: 450, 461, 470 km)",
+      "Shallow basin: rim only ~2 km above the floor, though the original depression was probably 4-5 km deep",
+      "Smooth, sediment- and lava-filled floor plains modified by wind or water erosion",
+      "42 km crater embedded in the inner rim, filled with sediments (terrace and delta-like structure)",
+      "Small sediment-filled craters on the floor, some filled almost to their rims",
+      "Layered sedimentary outcrops in the northwestern floor",
+      "Heavily eroded crater rim with dunes and wind-blown dark sand",
+    ],
+    temperature: -55, // approximate annual mean at the equator in °C. This is a rough estimate, not a measured Schiaparelli-specific value from the sources found. Day/night swings are large.
+    surfaceMaterial: [
+      "Light-toned, finely bedded sedimentary rock, with layers of uniform thickness on the NW floor",
+      "Dark sand drifts and lighter wind-blown ripples around layered outcrops",
+      "Dark wind-blown volcanic sand banded across windward rim slopes",
+      "Volcanic (lava) deposits, lake or wind-laid sediments, and impact ejecta fill the basin",
+      "Fine dust is likely given the wind-sculpted terrain, but no grain-size measurements were found",
+    ],
+    sunlight: [
+      "Near-equatorial site (about 3°S, 344°E), so the Sun passes high overhead",
+      "Day length is a sol, about 24 h 39 min",
+      "Seasonal variation in day length is small this close to the equator",
+      "Illumination will be shadowed near the rim and inner crater walls",
+    ],
+    radiation: [
+      "No Schiaparelli-specific measurements exist. Figures come from Curiosity's RAD in Gale crater",
+      "Mars' atmosphere cuts dose by about a factor of two compared with deep-space cruise",
+      "Dose rate varies about 3-5% daily with atmospheric pressure (thickness)",
+      "Dose rate differs by about 50% between solar maximum and minimum",
+      "Solar energetic particle events add short-term dose spikes",
+      "Hills and cliffs provide some natural shielding",
+    ],
+    resources: [
+      "Water ice: none confirmed at the surface; the equatorial location makes surface ice unlikely",
+      "Possible hydrated or water-laid minerals in the layered sediments, which may have formed in a lake (unconfirmed)",
+      "Sedimentary layers are scientifically valuable and could hold evidence of water, but no usable-mineral mapping was found in the sources",
+      "Volcanic sand and basaltic material for construction or regolith use",
+      "Abundant solar energy from the equatorial position",
+    ],
+    interestingBits: [
+      "Layered sediments may record ancient lake deposition, wind deposition, or orbital-tilt-driven climate cycles",
+      "Bulls-eye ring layering in a ~2 km floor crater shows younger layers inside older ones",
+      "Mars Express imagery shows evidence of both water and wind in the basin",
+      "Deposits may have accumulated over three to four billion years",
+      "Named for Giovanni Schiaparelli, who mapped Mars during the 1877 opposition",
+      "Featured as the Ares 4 landing site in Andy Weir's The Martian",
+    ],
+    hazards: [
+      "Wind-blown dunes and sand drifts could trap rovers or erode equipment",
+      "Steep or eroded slopes on crater rims and in small embedded craters",
+      "Dust accumulation on solar panels and moving parts",
+      "Cosmic ray and solar particle radiation, with no dose estimate specific to this site",
+      "Large daily temperature swings and cold nights",
+      "Layered terrain may be unevenly eroded, creating narrow plateaus and sharp contours",
+    ],
+    dataSources: [
+      { url: "https://www.dlr.de/en/images_archive/2010/4/features-in-schiaparelli_18104", name: "ESA/DLR/FU Berlin - Features in Schiaparelli (Mars Express HRSC)" },
+      { url: "https://phys.org/news/2010-12-schiaparelli-mars.pdf", name: "ESA via Phys.org - Schiaparelli on Mars shaped by wind, water" },
+      { url: "https://www.dlr.de/en/latest/news/2026/bird-s-eye-view-of-schiaparelli-flying-around-a-giant-martian-crater/schiaparelli-impact-basin-on-mars-filled-with-deposits", name: "ESA/DLR/FU Berlin - Schiaparelli impact basin filled with deposits" },
+      { url: "https://www.jpl.nasa.gov/images/pia04592-schiaparelli-sedimentary-rocks", name: "NASA/JPL - Schiaparelli Sedimentary Rocks (MGS MOC)" },
+      { url: "https://www.jpl.nasa.gov/images/pia06929-schiaparellis-sedimentary-rocks", name: "NASA/JPL - Schiaparelli's Sedimentary Rocks (PIA06929)" },
+      { url: "https://pds-rings.seti.org/press_releases/pages/PIA03xxx/PIA03177.html", name: "NASA/JPL/MSSS - Ancient Layered Rocks in Schiaparelli Crater" },
+      { url: "https://www.uahirise.org/PSP_005897_1790", name: "NASA/JPL-Caltech/UArizona HiRISE - Layers Filling Crater in Schiaparelli" },
+      { url: "https://phys.org/news/2012-11-humans-mars.pdf", name: "Phys.org - Curiosity RAD radiation measurements" },
+      { url: "https://e-docs.geo-leo.de/ris/handle/11858/10943", name: "JGR Planets 2023 - Zenith-angle dependence of Mars surface dose rate (MSL/RAD)" },
+      { url: "https://the-martian.fandom.com/wiki/Schiaparelli_crater", name: "The Martian Wiki - Schiaparelli crater overview" },
+    ],
+  },
+  {
+    "name": "Sumgin Crater",
+    // probably the worst one. Not much info when I searched for it. Not even a wiki article...
+    "terrainType": [
+      "Crater floor",
+      "Impact basin highlands",
+      "Aeolian dune fields"
+    ],
+    "temperature": -60,
+    "surfaceMaterial": [
+      "Basaltic sands",
+      "Fine-grained Martian dust (regolith)",
+      "Impact breccia"
+    ],
+    "sunlight": [
+      "Moderate diurnal cycle typical of southern mid-latitudes",
+      "Seasonal variations with reduced insolation during Martian winter"
+    ],
+    "radiation": [
+      "High cosmic galactic radiation (GCR)",
+      "Intermittent solar particle events (SPE)"
+    ],
+    "resources": [
+      "Potential subsurface water ice reserves",
+      "Basaltic minerals for potential in-situ resource utilization (ISRU)"
+    ],
+    "interestingBits": [
+      "Located in the heavily cratered highlands of Noachis Terra, just north of Argyre Planitia",
+      "Features extensive dark basaltic sand dunes mapped by NASA Odyssey and MRO missions"
+    ],
+    "hazards": [
+      "Active shifting aeolian sand dunes",
+      "Thin atmosphere providing minimal shielding against solar and cosmic radiation",
+      "Extremely low atmospheric pressures and freezing ambient surface temperatures",
+      "Perennial fine dust storms affecting visibility and solar equipment"
+    ],
+    "dataSources": [
+      {
+        "url": "https://science.nasa.gov/photojournal/sumgin-crater-false-color/",
+        "name": "NASA Science Photojournal - Sumgin Crater"
+      },
+      {
+        "url": "https://planetarynames.wr.usgs.gov/Feature/2843",
+        "name": "USGS Gazetteer of Planetary Nomenclature - Sumgin"
+      }
+    ]
+  }
+]
