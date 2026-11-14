@@ -2,6 +2,7 @@ import { useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { X, MapPin, ArrowRight } from 'lucide-react';
 import { band, envLabel, formatCoord, matchScore, matchWeights, orderedDimensions, TARGETS, TARGET_CONDITIONS } from '@/lib/analog';
+import { getPlanetarySiteSources } from '@/data/planetarySiteSources';
 import DimensionBar from './DimensionBar';
 import NasaClimatePanel from './NasaClimatePanel';
 
@@ -12,6 +13,7 @@ export default function SiteSheet({ site: activeSite, target, destinationSite, o
 
   const score = site ? matchScore(site, target, destinationSite) : 0;
   const weights = matchWeights(target, destinationSite);
+  const planetarySources = getPlanetarySiteSources(destinationSite);
 
   return (
     <AnimatePresence>
@@ -143,14 +145,30 @@ export default function SiteSheet({ site: activeSite, target, destinationSite, o
                 </ul>
               </Section>
 
-              <Section title="Data sources">
-                <div className="flex flex-wrap gap-2">
-                  {site.sources.map((source) => (
-                    <span key={source} className="rounded-full border border-border px-2.5 py-1 text-[10px] text-muted-foreground">
-                      {source}
-                    </span>
+              <Section title={`${destinationSite.name} references`}>
+                <ul className="mt-4 space-y-2">
+                  {planetarySources.map((source) => (
+                    <li key={source.label} className="text-[11px] leading-relaxed">
+                      {source.href ? (
+                        <a
+                          href={source.href}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="text-muted-foreground underline decoration-border underline-offset-2 transition-colors hover:text-primary"
+                        >
+                          {source.label}
+                        </a>
+                      ) : (
+                        <span className="text-muted-foreground">{source.label}</span>
+                      )}
+                    </li>
                   ))}
-                </div>
+                </ul>
+                {destinationSite.body === 'moon' ? (
+                  <p className="mt-3 text-[10px] leading-relaxed text-muted-foreground/70">
+                    Some lunar citations are recorded without a full title or URL in the source files.
+                  </p>
+                ) : null}
               </Section>
             </motion.div>
           </motion.aside>
