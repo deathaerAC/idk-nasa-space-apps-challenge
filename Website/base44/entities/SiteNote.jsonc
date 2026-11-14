@@ -1,0 +1,64 @@
+{
+  "name": "SiteNote",
+  "type": "object",
+  "properties": {
+    "site_slug": {
+      "type": "string",
+      "description": "Slug of the analog site this note belongs to"
+    },
+    "author_name": {
+      "type": "string",
+      "description": "Display name of the person leaving the note"
+    },
+    "body": {
+      "type": "string",
+      "description": "The field note itself"
+    },
+    "perspective": {
+      "type": "string",
+      "enum": [
+        "moon",
+        "mars",
+        "both"
+      ],
+      "description": "Which destination this observation speaks to",
+      "enumColors": [
+        "gray",
+        "red",
+        "blue"
+      ]
+    }
+  },
+  "required": [
+    "site_slug",
+    "body"
+  ],
+  "rls": {
+    "read": {},
+    "create": {},
+    "update": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    },
+    "delete": {
+      "$or": [
+        {
+          "created_by_id": "{{user.id}}"
+        },
+        {
+          "user_condition": {
+            "role": "admin"
+          }
+        }
+      ]
+    }
+  }
+}

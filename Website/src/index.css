@@ -1,0 +1,106 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 45% 4%;
+    --foreground: 210 22% 94%;
+    --card: 219 34% 7%;
+    --card-foreground: 210 22% 94%;
+    --popover: 219 34% 7%;
+    --popover-foreground: 210 22% 94%;
+    --primary: 214 74% 63%;
+    --primary-foreground: 220 45% 5%;
+    --secondary: 217 26% 12%;
+    --secondary-foreground: 210 22% 92%;
+    --muted: 217 26% 11%;
+    --muted-foreground: 214 13% 62%;
+    --accent: 24 52% 56%;
+    --accent-foreground: 220 45% 5%;
+    --destructive: 0 62% 48%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 216 24% 15%;
+    --input: 216 24% 16%;
+    --ring: 214 74% 63%;
+    --chart-1: 214 74% 63%;
+    --chart-2: 24 52% 56%;
+    --chart-3: 200 30% 55%;
+    --chart-4: 40 40% 62%;
+    --chart-5: 260 30% 60%;
+    --radius: 0.25rem;
+    --font-heading: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    --sidebar-background: 219 34% 6%;
+    --sidebar-foreground: 210 22% 92%;
+    --sidebar-primary: 214 74% 63%;
+    --sidebar-primary-foreground: 220 45% 5%;
+    --sidebar-accent: 217 26% 12%;
+    --sidebar-accent-foreground: 210 22% 92%;
+    --sidebar-border: 216 24% 15%;
+    --sidebar-ring: 214 74% 63%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground font-body;
+  }
+
+  ::selection {
+    background: hsl(214 74% 63% / 0.28);
+  }
+}
+
+@layer utilities {
+  .label-mono {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* Leaflet, restyled for the atlas */
+.leaflet-container {
+  background: hsl(220 45% 4%);
+  font-family: var(--font-body);
+  outline: none;
+}
+.leaflet-container a {
+  color: hsl(214 74% 63%);
+}
+.leaflet-tooltip.atlas-tip {
+  background: hsl(219 34% 8%);
+  border: 1px solid hsl(216 24% 20%);
+  color: hsl(210 22% 94%);
+  border-radius: 2px;
+  box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.9);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 4px 7px;
+}
+.leaflet-tooltip.atlas-tip::before {
+  display: none;
+}

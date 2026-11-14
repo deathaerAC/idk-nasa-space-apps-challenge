@@ -1,0 +1,4 @@
+allowBuilds:
+  core-js: true
+minimumReleaseAgeExclude:
+  - '@base44/sdk@0.8.61'
