@@ -3,9 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { X, MapPin, ArrowRight } from 'lucide-react';
 import { band, envLabel, formatCoord, matchScore, matchWeights, orderedDimensions, TARGETS, TARGET_CONDITIONS } from '@/lib/analog';
 import DimensionBar from './DimensionBar';
-import FieldBrief from './FieldBrief';
 import NasaClimatePanel from './NasaClimatePanel';
-import SiteNotes from './SiteNotes';
 
 export default function SiteSheet({ site: activeSite, target, destinationSite, onClose }) {
   const lastSite = useRef(activeSite);
@@ -143,14 +141,6 @@ export default function SiteSheet({ site: activeSite, target, destinationSite, o
                     </li>
                   ))}
                 </ul>
-              </Section>
-
-              <Section title="Field brief">
-                <FieldBrief site={site} target={target} />
-              </Section>
-
-              <Section title="Field notes">
-                <SiteNotes siteSlug={site.slug} />
               </Section>
 
               <Section title="Data sources">

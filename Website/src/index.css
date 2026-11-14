@@ -86,6 +86,9 @@
   font-family: var(--font-body);
   outline: none;
 }
+.leaflet-container .leaflet-pane {
+  z-index: auto;
+}
 .leaflet-container a {
   color: hsl(214 74% 63%);
 }
