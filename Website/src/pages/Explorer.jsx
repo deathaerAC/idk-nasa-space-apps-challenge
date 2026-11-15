@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+// AI disclosure: the animation, graphics and sound parts of this file were written with Claude (Anthropic), an AI tool.
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import SiteHeader from '@/components/SiteHeader';
@@ -6,7 +7,7 @@ import Hero from '@/components/Hero';
 import ExplorerControls from '@/components/ExplorerControls';
 import DestinationBand from '@/components/DestinationBand';
 import AstronautGuide from '@/components/AstronautGuide';
-import { AnimatedPlanet, PlanetIcon, SoundToggle } from '@/components/space';
+import { AiTag, AnimatedPlanet, PlanetIcon, SoundToggle } from '@/components/space';
 import AnalogMap from '@/components/AnalogMap';
 import SiteCard from '@/components/SiteCard';
 import SiteSheet from '@/components/SiteSheet';
@@ -21,7 +22,9 @@ export default function Explorer() {
     PLANETARY_SITES.find((site) => site.id === 'mars-jezero'),
   );
   const [env, setEnv] = useState('all');
-  const [selectedSlug, setSelectedSlug] = useState(null);
+  const [selectedSlug, setSelectedSlug] = useState(null); // the site whose details panel is open
+  const [focusSlug, setFocusSlug] = useState(null); // the site the map is looking at
+  const openTimer = useRef(0);
 
   const ranked = useMemo(
     () => rankedSites(ANALOG_SITES, target, destinationSite),
@@ -46,6 +49,21 @@ export default function Explorer() {
     setTarget(site.body);
     setDestinationSite(site);
   }
+
+  // Picking an Earth site (from the list or the map): the map flies to its marker straight away,
+  // and the details panel opens a moment later so the trip can be seen first.
+  function selectSite(slug) {
+    window.clearTimeout(openTimer.current);
+    setFocusSlug(slug);
+    const box = document.getElementById('atlas-map');
+    const edges = box ? box.getBoundingClientRect() : null;
+    const mapOnScreen = Boolean(edges) && edges.bottom > 120 && edges.top < window.innerHeight - 120;
+    const calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (mapOnScreen && !calm) openTimer.current = window.setTimeout(() => setSelectedSlug(slug), 750);
+    else setSelectedSlug(slug);
+  }
+
+  useEffect(() => () => window.clearTimeout(openTimer.current), []);
 
   return (
     <div className="relative min-h-screen">
@@ -83,13 +101,14 @@ export default function Explorer() {
           transition={{ duration: 0.7, delay: 0.45, ease: [0.22, 1, 0.36, 1] }}
           className="mt-8 grid gap-px overflow-hidden rounded-sm border border-border bg-border lg:grid-cols-[1.35fr_1fr]"
         >
-          <div className="bg-background">
+          <div id="atlas-map" className="bg-background">
             <AnalogMap
               entries={visible}
               target={target}
               destinationSite={destinationSite}
-              selectedSlug={selectedSlug}
-              onSelect={setSelectedSlug}
+              selectedSlug={focusSlug}
+              onSelect={selectSite}
+              onReset={() => setFocusSlug(null)}
             />
           </div>
 
@@ -112,8 +131,8 @@ export default function Explorer() {
                     target={target}
                     destinationSite={destinationSite}
                     index={index}
-                    active={site.slug === selectedSlug}
-                    onSelect={setSelectedSlug}
+                    active={site.slug === focusSlug}
+                    onSelect={selectSite}
                   />
                 ))
               )}
@@ -136,7 +155,10 @@ export default function Explorer() {
                 <p className="mt-4 text-[14px] leading-[1.8] text-muted-foreground">{lead.site.summary}</p>
               </div>
               <div className="flex shrink-0 items-center gap-5">
-                <AnimatedPlanet key={target} planet={target} size={92} parallax={6} enter alt="" />
+                <div className="relative">
+                  <AnimatedPlanet key={target} planet={target} size={92} parallax={6} enter alt="" />
+                  <AiTag className="absolute left-1/2 top-full mt-1 -translate-x-1/2">AI-generated</AiTag>
+                </div>
                 <div className="flex items-baseline gap-3">
                   <span className="font-display text-6xl leading-none tabular-nums">{matchScore(lead.site, target, destinationSite)}</span>
                   <span className="label-mono text-muted-foreground">match for {destinationSite.name}</span>
@@ -163,7 +185,7 @@ export default function Explorer() {
 
 export function Footer() {
   return (
-    <footer className="mx-auto mt-20 max-w-[1440px] border-t border-border px-5 py-10 sm:px-8">
+    <footer className="mx-auto mt-20 max-w-[1440px] border-t border-border px-5 pb-20 pt-10 sm:px-8">
       <div className="flex flex-col gap-4 text-[11px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-5">
           {/* Earth, the Moon and Mars, bobbing one after the other */}
@@ -175,6 +197,14 @@ export function Footer() {
           <p>Terra Analog Atlas · NASA Space Apps Challenge 2026 · Open Earth, Moon and Mars data</p>
         </div>
         <p className="font-mono">Dataset v0.1 · curated from published field campaigns</p>
+      </div>
+      {/* Credits. NASA Space Apps asks teams to show where AI was used and to list outside resources. */}
+      <div className="mt-6 flex flex-col gap-3 text-[11px] leading-[1.6] text-muted-foreground sm:flex-row sm:items-center">
+        <AiTag className="self-start sm:self-auto">AI-generated</AiTag>
+        <p>
+          The planet, astronaut and icon graphics, and the animation and sound code, were made with Claude, an AI
+          tool. Music: Space Cinematic Ambient by Tunetank.
+        </p>
       </div>
       {/* Click sounds for every button, plus the round sound on / off button in the corner. The footer is on every page. */}
       <SoundToggle />
