@@ -24,13 +24,14 @@ if ($packageManager) {
 
 Push-Location "$PSScriptRoot\\Website"
 try {
-  & $packageManager.Source install
-  & $packageManager.Source run build
   if ($packageManagerName -eq "pnpm") {
+    & $packageManager.Source install
     & $packageManager.Source approve-builds --all
   } elseif ($packageManagerName -eq "npm") {
+    & $packageManager.Source install --legacy-peer-deps
     & $packageManager.Source approve-scripts --all
   }
+  & $packageManager.Source run build
 } finally {
   Pop-Location
 }
