@@ -1,6 +1,7 @@
+// AI disclosure: the animation, graphics and sound parts of this file were written with Claude (Anthropic), an AI tool.
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { AnimatedPlanet, OrbitScene, Starfield, useSleepWhenHidden } from '@/components/space';
+import { AiTag, AnimatedPlanet, OrbitScene, Starfield, useSleepWhenHidden } from '@/components/space';
 
 const EASE = [0.22, 1, 0.36, 1];
 
@@ -23,6 +24,9 @@ export default function Hero({ siteCount = 15 }) {
       </div>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_78%_18%,transparent_0%,hsl(220_45%_4%/0.85)_58%)]" />
 
+      {/* The planets, stars and astronaut in this section were made with AI, and this label says so. */}
+      <AiTag className="absolute right-4 top-4 z-10 sm:right-6">AI-generated graphics</AiTag>
+
       {/* Mars, floating further out. Hidden on tablets, where there is no free space for it. */}
       <div
         aria-hidden="true"
@@ -38,7 +42,7 @@ export default function Hero({ siteCount = 15 }) {
           transition={{ duration: 0.5, ease: EASE }}
           className="label-mono text-primary"
         >
-          NASA Space Apps Challenge · 2026
+          NASA Space Apps Challenge · 2026 · Team idkman
         </motion.p>
 
         <motion.h1

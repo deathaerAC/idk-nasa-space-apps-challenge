@@ -1,3 +1,4 @@
+// AI disclosure: the animation, graphics and sound parts of this file were written with Claude (Anthropic), an AI tool.
 import { Link, useLocation } from 'react-router-dom';
 import { Orbit } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -44,7 +45,7 @@ export default function SiteHeader() {
 
         <div className="hidden items-center gap-2 rounded-full border border-border px-3 py-1.5 lg:flex">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
-          <span className="label-mono text-muted-foreground">Space Apps 2026</span>
+          <span className="label-mono text-muted-foreground">Team idkman · Space Apps 2026</span>
         </div>
       </div>
     </header>
