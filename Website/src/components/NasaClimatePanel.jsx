@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { base44 } from '@/api/base44Client';
-
 const METRICS = [
   { key: 'temp_mean', label: 'Mean air temp', unit: '°C', digits: 1 },
   { key: 'wind_speed', label: 'Wind speed', unit: 'm/s', digits: 1 },
@@ -15,7 +13,8 @@ export default function NasaClimatePanel({ site }) {
     let active = true;
     setState({ status: 'loading', data: null });
 
-    base44.functions
+    // is this important?
+/*     base44.functions
       .invoke('nasaSiteClimate', { lat: site.lat, lon: site.lon })
       .then((response) => {
         if (!active) return;
@@ -24,7 +23,7 @@ export default function NasaClimatePanel({ site }) {
       })
       .catch(() => {
         if (active) setState({ status: 'error', data: null });
-      });
+      }); */
 
     return () => {
       active = false;
