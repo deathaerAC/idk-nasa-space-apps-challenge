@@ -1,4 +1,10 @@
 # idk-nasa-space-apps-challenge
+# Building from source
+In this directory:
+```ps1
+  & ./build.ps1
+```
+
 ## Moon report
 
 **Source:** LROC QuickMap region exports. The terrain layer is listed as `qts_demstack`.
