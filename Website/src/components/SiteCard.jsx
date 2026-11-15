@@ -1,3 +1,4 @@
+// AI disclosure: the animation, graphics and sound parts of this file were written with Claude (Anthropic), an AI tool.
 import { motion } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { band, envLabel, topDimensions } from '@/lib/analog';

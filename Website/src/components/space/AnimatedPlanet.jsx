@@ -1,3 +1,4 @@
+// AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026.
 import { useEffect, useRef } from "react";
 import { bindParallax, sleepWhenHidden } from "./space-core.js";
 import { PLANET_IMAGES, PLANET_MEDIUM, PLANET_ALT } from "./planets.js";

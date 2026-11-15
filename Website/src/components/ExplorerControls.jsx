@@ -1,3 +1,4 @@
+// AI disclosure: the animation, graphics and sound parts of this file were written with Claude (Anthropic), an AI tool.
 import { ENV_TYPES, TARGETS } from '@/lib/analog';
 import { cn } from '@/lib/utils';
 import { PlanetIcon, TerrainIcon } from '@/components/space';

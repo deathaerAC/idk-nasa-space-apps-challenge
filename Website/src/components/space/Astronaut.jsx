@@ -1,3 +1,4 @@
+// AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026.
 import "./space.css";
 
 const SUIT = "#f3f5fa";
@@ -59,6 +60,7 @@ export default function Astronaut({ mood = "float", mark, size = 120, accent = "
       role="img"
       aria-label={reading ? "Astronaut reading a pamphlet" : shrugging ? "Astronaut shrugging" : waving ? "Astronaut waving" : "Astronaut"}
     >
+      <desc>AI-generated graphic, made with Claude (Anthropic).</desc>
       <g className="sp-astro__all">
         {/* A new key when the mood changes makes the little hop play again. */}
         <g className="sp-astro__pose" key={reading ? "read" : shrugging ? "shrug" : "free"}>

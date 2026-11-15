@@ -1,3 +1,4 @@
+// AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026.
 // The planet pictures. Vite turns these into the right file paths when the site is built.
 /** @type {Record<string, string>} */
 export const PLANET_IMAGES = {

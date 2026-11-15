@@ -1,3 +1,4 @@
+// AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026.
 import { useEffect, useRef } from "react";
 import { sleepWhenHidden } from "./space-core.js";
 

@@ -1,4 +1,5 @@
-import { PlanetStage, Starfield, TerrainIcon, useSleepWhenHidden } from '@/components/space';
+// AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026.
+import { AiTag, PlanetStage, Starfield, TerrainIcon, useSleepWhenHidden } from '@/components/space';
 import { ENV_TYPES } from '@/lib/analog';
 
 /**
@@ -26,6 +27,8 @@ export default function DestinationBand({ target, onTargetChange, env = 'all', d
   return (
     <section ref={restRef} aria-label="What you are comparing" className="relative overflow-hidden border-b border-border">
       <Starfield fixed={false} count={44} shooting={1} parallax={10} />
+      {/* The planets, astronaut and icon in this strip were made with AI, and this label says so. */}
+      <AiTag className="absolute bottom-1.5 right-0">AI-generated graphics</AiTag>
 
       <div className="relative flex flex-col gap-7 py-7 lg:flex-row lg:items-center lg:justify-between lg:gap-6 xl:gap-8">
         <div

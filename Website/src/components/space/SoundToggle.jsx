@@ -1,7 +1,12 @@
+// AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026.
 import { useEffect, useState } from "react";
 import { isMuted, playSound, setMuted } from "./sfx.js";
-import { followTabVisibility, isMusicOn, setMusicOn, startMusic } from "./music.js";
+import { followTabVisibility, isMusicOn, isMusicPlaying, setMusicOn, startMusic } from "./music.js";
 import "./space.css";
+
+// Anything the browser counts as the visitor "doing something": pressing the mouse, tapping, or pressing a key.
+// Scrolling and moving the mouse do not count, and no website is allowed to play sound before one of these.
+const FIRST_ACTIONS = ["pointerdown", "mousedown", "pointerup", "touchend", "click", "keydown"];
 
 /**
  * Put this on a page once. It looks after all the sound:
@@ -15,6 +20,8 @@ import "./space.css";
 export default function SoundToggle() {
   const [muted, setMutedState] = useState(() => isMuted());
   const [music, setMusicState] = useState(() => isMusicOn());
+  // "started" is true once the browser has really let the music play.
+  const [started, setStarted] = useState(() => isMusicPlaying());
 
   // Click sounds for every button on the page.
   useEffect(() => {
@@ -36,19 +43,20 @@ export default function SoundToggle() {
     /** @param {Event} event */
     const onFirstAction = (event) => {
       const target = event.target;
-      if (target instanceof Element && target.closest(".sp-sound-dock")) return; // the buttons below handle themselves
+      if (target instanceof Element && target.closest("[data-music-button]")) return; // the music button handles itself
       if (!isMusicOn()) {
         stopWaiting(); // music is switched off: the music button will start it if the visitor wants it
         return;
       }
-      // Keep listening until the browser really lets the music start (phones can refuse the first try).
-      startMusic().then((started) => {
-        if (started) stopWaiting();
+      // Keep listening until the browser really lets the music start (it can refuse the first try).
+      startMusic().then((playing) => {
+        if (!playing) return;
+        setStarted(true);
+        stopWaiting();
       });
     };
-    const events = ["click", "touchend", "keydown"];
-    const stopWaiting = () => events.forEach((name) => document.removeEventListener(name, onFirstAction, true));
-    events.forEach((name) => document.addEventListener(name, onFirstAction, true));
+    const stopWaiting = () => FIRST_ACTIONS.forEach((name) => document.removeEventListener(name, onFirstAction, true));
+    FIRST_ACTIONS.forEach((name) => document.addEventListener(name, onFirstAction, true));
     const stopFollowing = followTabVisibility();
     return () => {
       stopWaiting();
@@ -57,9 +65,15 @@ export default function SoundToggle() {
   }, []);
 
   const toggleMusic = () => {
+    // Music is meant to be on but has not started yet (nothing had been clicked before this button):
+    // start it now, instead of switching it off.
+    if (music && !started && !isMusicPlaying()) {
+      startMusic().then((playing) => setStarted(playing));
+      return;
+    }
     const next = !music;
-    setMusicOn(next);
     setMusicState(next);
+    setMusicOn(next).then((playing) => setStarted(playing));
   };
 
   const toggleSounds = () => {
@@ -69,16 +83,19 @@ export default function SoundToggle() {
     if (!next) playSound("switch"); // a little hello when sounds come back on
   };
 
+  const waiting = music && !started;
+
   return (
     <div className="sp-sound-dock">
       <button
         type="button"
-        className="sp-sound"
+        className={`sp-sound${waiting ? " sp-sound--waiting" : ""}`}
+        data-music-button=""
         data-sound="none"
         onClick={toggleMusic}
         aria-pressed={music}
-        aria-label={music ? "Turn music off" : "Turn music on"}
-        title={music ? "Music is on" : "Music is off"}
+        aria-label={waiting ? "Start the music" : music ? "Turn music off" : "Turn music on"}
+        title={waiting ? "Click anywhere to start the music" : music ? "Music is on" : "Music is off"}
       >
         <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
           <path d="M9 17.5 V6 L19 4 V15.5" />

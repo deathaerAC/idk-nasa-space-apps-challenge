@@ -1,3 +1,4 @@
+// AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026.
 import { useEffect, useRef, useState } from 'react';
 import { Astronaut } from '@/components/space';
 import { prefersReducedMotion, sleepWhenHidden } from '@/components/space/space-core.js';

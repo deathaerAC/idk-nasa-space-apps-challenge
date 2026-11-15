@@ -1,3 +1,4 @@
+// AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026.
 import "./space.css";
 
 /* Each drawing sits on a 24 x 24 grid. Parts with a class such as sp-ti__sun are the ones that move. */
@@ -112,6 +113,7 @@ export default function TerrainIcon({ type = "all", size = 16, live = false, cla
       aria-hidden="true"
       focusable="false"
     >
+      <desc>AI-generated graphic, made with Claude (Anthropic).</desc>
       {DRAWINGS[type] ?? DRAWINGS.all}
     </svg>
   );

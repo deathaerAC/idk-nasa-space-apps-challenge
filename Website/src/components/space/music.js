@@ -1,3 +1,4 @@
+// AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026.
 /*
   Background music. One track that starts again by itself each time it ends.
 
@@ -126,7 +127,13 @@ export function stopMusic() {
   }, 450);
 }
 
-/** @param {boolean} value */
+/**
+ * Switches the music on or off and remembers the choice.
+ * Gives back a promise that says whether the music is now really playing.
+ *
+ * @param {boolean} value
+ * @returns {Promise<boolean>}
+ */
 export function setMusicOn(value) {
   enabled = Boolean(value);
   try {
@@ -134,8 +141,9 @@ export function setMusicOn(value) {
   } catch {
     // not being able to remember the choice is fine
   }
-  if (enabled) startMusic();
-  else stopMusic();
+  if (enabled) return startMusic();
+  stopMusic();
+  return Promise.resolve(false);
 }
 
 /** Pauses while the tab is in the background and carries on when the visitor comes back. */

@@ -1,3 +1,4 @@
+/* AI disclosure: this file was written with Claude (Anthropic), an AI tool, for the NASA Space Apps Challenge 2026. */
 /*
   Space motion kit. Pure CSS, no libraries.
   Every class starts with "sp-" so it will not clash with your own styles.
@@ -927,6 +928,25 @@ button.sp-stage__body.is-active {
   }
 }
 
+/* ---------- "AI-generated" label ---------- */
+
+.sp-ai-tag {
+  display: inline-block;
+  padding: 2px 5px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  background: rgba(8, 12, 22, 0.34);
+  color: rgba(255, 255, 255, 0.5); /* see-through, but still readable on the dark background */
+  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+  font-size: 7px;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 /* ---------- Music and sound buttons ---------- */
 
 .sp-sound-dock {
@@ -958,6 +978,23 @@ button.sp-stage__body.is-active {
   border-color: rgba(110, 162, 238, 0.75);
   transform: scale(1.06);
 }
+/* The music button glows softly until the music has been allowed to start. */
+.sp-sound--waiting {
+  animation: sp-sound-wait 1.8s ease-in-out infinite;
+}
+
+@keyframes sp-sound-wait {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(110, 162, 238, 0);
+    border-color: rgba(255, 255, 255, 0.16);
+  }
+  50% {
+    box-shadow: 0 0 0 5px rgba(110, 162, 238, 0.22);
+    border-color: rgba(110, 162, 238, 0.8);
+  }
+}
+
 .sp-sound:focus-visible {
   outline: 2px solid rgba(110, 162, 238, 0.9);
   outline-offset: 2px;
@@ -1053,6 +1090,7 @@ button.sp-stage__body.is-active {
   .sp-bob,
   .sp-rise,
   .sp-drift,
+  .sp-sound--waiting,
   .sp-astro *,
   .sp-ti * {
     animation: none !important;

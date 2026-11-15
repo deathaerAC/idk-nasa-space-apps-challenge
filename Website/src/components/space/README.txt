@@ -19,6 +19,7 @@ What is in here
   sfx.js          the click sounds. They are made by the browser, so there are no sound
                   files. Pitch, length and loudness are at the top of the file
   useSleepWhenHidden   pauses the animations inside a section while it is scrolled out of view
+  AiTag           the small visible "AI-generated" label
 
 No extra packages are needed. It only uses React, which the project already has.
 
@@ -62,6 +63,19 @@ Using it on another page
 
   Starfield on its own fills the whole page behind everything. Put className="sp-above"
   on the box that holds your normal content so it stays on top of the stars.
+
+
+AI disclosure (NASA Space Apps asks for this)
+- The graphics here were made with Claude, an AI tool. On the site they carry a visible
+  "AI-generated" label: in the Hero (one label in the top corner, which covers every graphic
+  in that section), in the "You are comparing" strip, beside the "Leading
+  candidate" planet, and in the footer credit line that shows on every page.
+- The tiny icons on buttons and cards are too small for their own label. They are covered by
+  the footer credit line.
+- Every code file made with Claude says so in its first line, the planet pictures say so in
+  their file details (metadata), and the project README has an "AI use and credits" section.
+- If the organisers want it done differently, the labels are the <AiTag> lines in Hero.jsx,
+  DestinationBand.jsx and pages/Explorer.jsx.
 
 
 Music and sounds
