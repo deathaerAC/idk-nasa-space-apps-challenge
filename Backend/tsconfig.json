@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "nodenext",
     "target": "esnext",
     "rootDir": "src",
     "outDir": "dist",
@@ -10,6 +10,10 @@
     "noUncheckedIndexedAccess": true,
     "noImplicitOverride": true,
     "noFallthroughCasesInSwitch": true,
-    "types": ["node", "express"]
+    "types": ["node", "express"],
+    "noEmit": true,
+    "rewriteRelativeImportExtensions": true,
+    "erasableSyntaxOnly": true,
+    "verbatimModuleSyntax": true
   }
 }
