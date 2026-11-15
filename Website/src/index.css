@@ -107,3 +107,24 @@
 .leaflet-tooltip.atlas-tip::before {
   display: none;
 }
+/* The + and - zoom buttons, in the atlas's dark style */
+.leaflet-container .leaflet-bar {
+  border: 1px solid hsl(216 24% 20%);
+  border-radius: 2px;
+  box-shadow: none;
+  overflow: hidden;
+}
+.leaflet-container .leaflet-bar a,
+.leaflet-container .leaflet-bar a:focus {
+  background: hsl(219 34% 8% / 0.92);
+  border-bottom-color: hsl(216 24% 20%);
+  color: hsl(210 22% 94%);
+}
+.leaflet-container .leaflet-bar a:hover {
+  background: hsl(217 26% 14%);
+  color: hsl(210 22% 100%);
+}
+.leaflet-container .leaflet-bar a.leaflet-disabled {
+  background: hsl(219 34% 8% / 0.92);
+  color: hsl(214 13% 40%);
+}
