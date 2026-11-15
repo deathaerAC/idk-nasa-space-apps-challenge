@@ -1,6 +1,10 @@
 # idk-nasa-space-apps-challenge
 # Building from source
-In this directory:
+Clone this repo:
+```ps1
+  git clone https://github.com/deathaerAC/idk-nasa-space-apps-challenge.git
+```
+In the cloned directory:
 ```ps1
   & ./build.ps1
 ```
