@@ -34,5 +34,12 @@ try {
 } finally {
   Pop-Location
 }
+Push-Location "$PSScriptRoot\\Backend"
+try {
+  & $packageManager.Source install
+  & $packageManager.Source run build
+} finally {
+  Pop-Location
+}
 
 & $runtime "$PSScriptRoot\\Backend"
