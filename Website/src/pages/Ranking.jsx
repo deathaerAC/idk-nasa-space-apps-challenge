@@ -1,3 +1,4 @@
+// AI disclosure: the animation, graphics and sound parts of this file were written with Claude (Anthropic), an AI tool.
 import { useMemo, useState } from 'react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteSheet from '@/components/SiteSheet';

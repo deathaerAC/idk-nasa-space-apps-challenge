@@ -1,3 +1,4 @@
+// AI disclosure: the animation, graphics and sound parts of this file were written with Claude (Anthropic), an AI tool.
 import SiteHeader from '@/components/SiteHeader';
 import { PlanetIcon } from '@/components/space';
 import { Footer } from '@/pages/Explorer';
