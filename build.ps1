@@ -38,7 +38,6 @@ try {
 Push-Location "$PSScriptRoot\\Backend"
 try {
   & $packageManager.Source install
-  & $packageManager.Source run build
 } finally {
   Pop-Location
 }
