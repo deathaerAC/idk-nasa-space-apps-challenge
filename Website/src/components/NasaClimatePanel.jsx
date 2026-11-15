@@ -1,4 +1,54 @@
+// AI disclosure: the part of this file that reads NASA POWER (readNasaAnswer and fetchClimate) was written with Claude (Anthropic), an AI tool.
 import { useEffect, useState } from 'react';
+
+const NASA_PARAMS = 'T2M,T2M_MIN,T2M_MAX,WS2M,RH2M,PRECTOTCORR,ALLSKY_SFC_SW_DWN';
+
+// Picks the yearly figures out of a NASA POWER answer. Returns null when there is nothing usable in it.
+function readNasaAnswer(json) {
+  const parameter = json?.properties?.parameter || {};
+  const annual = (name) => {
+    const value = parameter?.[name]?.ANN;
+    return typeof value === 'number' ? value : null;
+  };
+  const values = {
+    temp_mean: annual('T2M'),
+    temp_min: annual('T2M_MIN'),
+    temp_max: annual('T2M_MAX'),
+    wind_speed: annual('WS2M'),
+    humidity: annual('RH2M'),
+    precipitation: annual('PRECTOTCORR'),
+    solar_irradiance: annual('ALLSKY_SFC_SW_DWN'),
+  };
+  if (Object.values(values).every((value) => value === null)) return null;
+  const rawElevation = json?.geometry?.coordinates?.[2];
+  return { ...values, elevation_m: typeof rawElevation === 'number' ? Math.round(rawElevation) : null };
+}
+
+// Gets the climate figures for one place. It tries two ways, in this order:
+//   1. this site's own server (the /api/nasa-climate route in Backend/src/server.ts), which asks NASA for us
+//   2. NASA POWER directly from the visitor's browser
+// Returns null when neither gives an answer.
+async function fetchClimate(lat, lon) {
+  const latitude = Number(lat).toFixed(3);
+  const longitude = Number(lon).toFixed(3);
+  const sources = [
+    `/api/nasa-climate?lat=${latitude}&lon=${longitude}`,
+    'https://power.larc.nasa.gov/api/temporal/climatology/point' +
+      `?parameters=${NASA_PARAMS}&community=RE&longitude=${longitude}&latitude=${latitude}&format=JSON`,
+  ];
+  for (const url of sources) {
+    try {
+      const response = await fetch(url);
+      if (!response.ok) continue;
+      const data = readNasaAnswer(await response.json());
+      if (data) return data;
+    } catch {
+      // not reachable, or not a NASA answer: try the next way
+    }
+  }
+  return null;
+}
+
 const METRICS = [
   { key: 'temp_mean', label: 'Mean air temp', unit: '°C', digits: 1 },
   { key: 'wind_speed', label: 'Wind speed', unit: 'm/s', digits: 1 },
@@ -13,17 +63,14 @@ export default function NasaClimatePanel({ site }) {
     let active = true;
     setState({ status: 'loading', data: null });
 
-    // is this important?
-/*     base44.functions
-      .invoke('nasaSiteClimate', { lat: site.lat, lon: site.lon })
-      .then((response) => {
+    fetchClimate(site.lat, site.lon)
+      .then((data) => {
         if (!active) return;
-        const data = response?.data?.data;
         setState(data ? { status: 'ready', data } : { status: 'error', data: null });
       })
       .catch(() => {
         if (active) setState({ status: 'error', data: null });
-      }); */
+      });
 
     return () => {
       active = false;
