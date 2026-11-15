@@ -1,5 +1,5 @@
 # idk-nasa-space-apps-challenge
-# Building from source
+## Building from source
 Clone this repo:
 ```ps1
   git clone https://github.com/deathaerAC/idk-nasa-space-apps-challenge.git
