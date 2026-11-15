@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "module": "esnext",
+    "target": "esnext",
+    "rootDir": "src",
+    "outDir": "dist",
+    "removeComments": true,
+    "sourceMap": true,
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "types": ["node", "express"]
+  }
+}
